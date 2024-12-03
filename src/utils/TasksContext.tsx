@@ -1,73 +1,105 @@
-import {
+import React, {
   createContext,
   useState,
   useEffect,
-  ReactNode,
   useContext,
+  ReactNode,
   FC,
 } from "react";
-import { Task } from "./types";
-import { EditTask, FetchTasks } from "./functions";
+import { newTask, Task } from "./types";
+import {
+  CreateTask,
+  DeleteTask,
+  EditTask,
+  FetchTasks,
+} from "./firebaseFunctions";
 
-interface TasksContextType {
+type TasksContextType = {
   tasks: Task[];
-  updateTask: (
-    taskId: string,
-    modifiedProperties: Partial<Task>
-  ) => Promise<boolean>;
-}
+  fetchTasks: () => Promise<void>;
+  createTask: (newTask: newTask) => Promise<boolean>;
+  updateTask: (taskId: string, updatedTask: Partial<Task>) => Promise<boolean>;
+  deleteTask: (taskId: string) => Promise<boolean>;
+};
 
-export const TasksContext = createContext<TasksContextType | undefined>(undefined);
-const TasksProvider: FC<{
-  userId: Task["userId"];
-  children: ReactNode;
-}> = ({ userId, children }) => {
+const TasksContext = createContext<TasksContextType | null>(null);
+
+export const TasksProvider: FC<{ userId: string; children: ReactNode }> = ({
+  userId,
+  children,
+}) => {
   const [tasks, setTasks] = useState<Task[]>([]);
 
-  // Update a task and modify the frontend state if successful
-  const updateTask = async (
-    taskId: Task["id"],
-    modifiedProperties: Partial<Task>
-  ) => {
-    const isUpdated = await EditTask(taskId, modifiedProperties);
-    if (isUpdated) {
-      setTasks((prevTasks) =>
-        prevTasks.map((task) =>
-          task.id === taskId ? { ...task, ...modifiedProperties } : task
-        )
-      );
-      return true;
+  const fetchTasks = async () => {
+    try {
+      const fetchedTasks = await FetchTasks(userId);
+      setTasks(fetchedTasks);
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+    }
+  };
+
+  const createTask = async (newTask: newTask) => {
+    try {
+      const isCreated = await CreateTask(newTask);
+      if (isCreated) {
+        setTasks((prevTasks) => [...prevTasks, newTask]);
+        return true;
+      }
+    } catch (error) {
+      console.error("Error creating task:", error);
     }
     return false;
   };
 
-  // Fetch tasks from the backend
-  const fetchTasks = async () => {
-    const fetchedTasks = await FetchTasks(userId);
-    
-  console.dir(fetchedTasks);
-    setTasks(fetchedTasks);
+  const updateTask = async (taskId: string, updatedTask: Partial<Task>) => {
+    try {
+      const isUpdated = await EditTask(taskId, updatedTask);
+      if (isUpdated) {
+        setTasks((prevTasks) =>
+          prevTasks.map((task) =>
+            task.id === taskId ? { ...task, ...updatedTask } : task
+          )
+        );
+        return true;
+      }
+    } catch (error) {
+      console.error("Error updating task:", error);
+    }
+    return false;
   };
 
-  // Fetch tasks when the component mounts or when userId changes
+  const deleteTask = async (taskId: string) => {
+    try {
+      const isDeleted = await DeleteTask(taskId);
+      if (isDeleted) {
+        setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
+        return true;
+      }
+    } catch (error) {
+      console.error("Error deleting task:", error);
+    }
+    return false;
+  };
+
   useEffect(() => {
     if (userId) fetchTasks();
   }, [userId]);
 
   return (
-    <TasksContext.Provider value={{ tasks: tasks, updateTask: updateTask }}>
+    <TasksContext.Provider
+      value={{ tasks, fetchTasks, createTask, updateTask, deleteTask }}
+    >
       {children}
     </TasksContext.Provider>
   );
-  };
+};
 
-export default TasksProvider;
-
-// Custom hook to use the TasksContext
-// export const useTasksContext = () => {
-//   const context = useContext(TasksContext);
-//   if (!context) {
-//     throw new Error("useTasksContext must be used within a TasksProvider");
-//   }
-//   return context;
-// };
+// Custom Hook
+export const useTasksContext = () => {
+  const context = useContext(TasksContext);
+  if (!context) {
+    throw new Error("useTasksContext must be used within a TasksProvider");
+  }
+  return context;
+};

@@ -1,14 +1,14 @@
-import { Suspense, useContext, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Task } from "../utils/types";
-import TasksList from "./TasksList";
-import { TasksContext } from "../utils/TasksContext";
 import "keen-slider/keen-slider.min.css";
 import { useKeenSlider } from "keen-slider/react";
+import TaskShow from "./TaskShow";
+import SubTabs from "./SubTabs";
 
-const TasksContainer = ({ tab }: { tab: number }) => {
+const TasksContainer = ({ tasks }: { tasks: Task[] }) => {
   const [subTab, setSubTab] = useState(0);
-  const context = useContext(TasksContext);
   const [loaded, setLoaded] = useState(false);
+
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
     initial: 0,
     slideChanged(slider) {
@@ -18,99 +18,59 @@ const TasksContainer = ({ tab }: { tab: number }) => {
       setLoaded(true);
     },
   });
-  const tasks = context?.tasks;
-  const newTasks = useMemo(
-    () => tasks?.filter((task: Task) => task.type === 0),
+
+  // Divide tasks into subtabs
+  const allTasks = tasks;
+  const timelyTasks = useMemo(
+    () => tasks.filter((task) => task.isTimeSpecific),
     [tasks]
   );
-  const newTimelyTasks = useMemo(
-    () => newTasks?.filter((task: Task) => task.isTimeSpecific),
-    [newTasks]
-  );
-  const newNonTimelyTasks = useMemo(
-    () => newTasks?.filter((task: Task) => !task.isTimeSpecific),
-    [newTasks]
-  );
-  const pendingTasks = useMemo(
-    () => tasks?.filter((task: Task) => task.type === 1),
+  const nonTimelyTasks = useMemo(
+    () => tasks.filter((task) => !task.isTimeSpecific),
     [tasks]
-  );
-  const pendingTimelyTasks = useMemo(
-    () => pendingTasks?.filter((task: Task) => task.isTimeSpecific),
-    [pendingTasks]
-  );
-  const pendingNonTimelyTasks = useMemo(
-    () => pendingTasks?.filter((task: Task) => !task.isTimeSpecific),
-    [pendingTasks]
-  );
-  const completedTasks = useMemo(
-    () => tasks?.filter((task: Task) => task.type === 2),
-    [tasks]
-  );
-  const completedTimelyTasks = useMemo(
-    () => completedTasks?.filter((task: Task) => task.isTimeSpecific),
-    [completedTasks]
-  );
-  const completedNonTimelyTasks = useMemo(
-    () => completedTasks?.filter((task: Task) => !task.isTimeSpecific),
-    [completedTasks]
   );
 
-  const navlinks = ["All", "Timely", "Non Timely"];
-  
-  
+  const subtabs = [
+    { id: 0, text: "All", tasks: allTasks },
+    { id: 1, text: "Timely", tasks: timelyTasks },
+    { id: 2, text: "Non-Timely", tasks: nonTimelyTasks },
+  ];
+
   return (
-    <Suspense fallback={<div>Loading ...</div>}>
-      <div className="navigation-wrapper">
-        {loaded && instanceRef.current && (
-          <div className="w-full flex">
-            {[
-              ...Array(instanceRef.current.track.details.slides.length).keys(),
-            ].map((idx) => {
-              return (
-                <button
-                  key={idx}
-                  onClick={() => {
-                    instanceRef.current?.moveToIdx(idx);
-                  }}
-                  className={
-                    "w-full border-b rounded-md  " +
-                    (subTab === idx ? "border-x border-b-0 border-t" : "")
-                  }
-                >
-                  {navlinks[idx]}
-                </button>
-              );
-            })}
-          </div>
-        )}
+    <div className="w-full h-full flex flex-col flex-1 bg-base text-text">
+      {/* Subtab Navigation */}
+      {loaded && instanceRef.current && (
+        <SubTabs
+          changeSubTab={(tab: number) => instanceRef.current?.moveToIdx(tab)}
+          subtabs={subtabs}
+          selectedTab={subTab}
+        />
+      )}
+
+      {/* Slider Sections */}
+      <div
+        id="desktop"
+        className="w-full hidden lg:block columns-[300px] p-6 space-y-3 overflow-auto"
+      >
+        {subtabs[subTab].tasks?.map((task) => (
+          <TaskShow task={task} />
+        ))}
+      </div>
+      <div id="mobile" className="flex-1 overflow-auto lg:hidden">
         <div ref={sliderRef} className="keen-slider">
-          <TasksList
-            tasks={
-              tab === 0 ? newTasks : tab === 1 ? pendingTasks : completedTasks
-            }
-          />
-          <TasksList
-            tasks={
-              tab === 0
-                ? newTimelyTasks
-                : tab === 1
-                ? pendingTimelyTasks
-                : completedTimelyTasks
-            }
-          />
-          <TasksList
-            tasks={
-              tab === 0
-                ? newNonTimelyTasks
-                : tab === 1
-                ? pendingNonTimelyTasks
-                : completedNonTimelyTasks
-            }
-          />
+          {subtabs.map((subtab, idx) => (
+            <div
+              key={idx}
+              className="keen-slider__slide h-full flex flex-col items-center gap-3 p-6"
+            >
+              {subtab.tasks?.map((task) => (
+                  <TaskShow task={task} />
+              ))}
+            </div>
+          ))}
         </div>
       </div>
-    </Suspense>
+    </div>
   );
 };
 

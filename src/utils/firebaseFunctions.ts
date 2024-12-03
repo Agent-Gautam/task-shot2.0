@@ -1,26 +1,43 @@
-import { addDoc, deleteDoc, doc, getDocs, limit, query, updateDoc, where } from "firebase/firestore";
-import { Task } from "./types";
-import { base, tasksCol } from "./firebase";
+import {
+  addDoc,
+  deleteDoc,
+  doc,
+  getDocs,
+  limit,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
+import { newTask, Task } from "./types.ts";
+import { base, tasksCol } from "./firebase.ts";
+import mocktasks from "./Mockdata.ts";
+
+async function createMany() {
+  mocktasks.forEach(async (task: Task) => {
+    await addDoc(tasksCol, task);
+    console.log("created : ", task.description);
+  });
+}
 
 //check validation in frontend
-async function CreateTask(task: Task) {
-    try {
-        const newTaskRef = await addDoc(tasksCol, task);
-        return newTaskRef.id;
-    }
-    catch (error) {
-        console.error("Error creating the task",error);
-    }
+async function CreateTask(task: newTask) {
+  try {
+    const newTaskRef = await addDoc(tasksCol, task);
+    console.log("Task created successfully");
+    return newTaskRef.id;
+  } catch (error) {
+    console.error("Error creating the task", error);
+  }
 }
 
 async function DeleteTask(taskId: Task["id"]): Promise<boolean> {
   try {
     const taskRef = doc(base, "tasks", taskId);
-      await deleteDoc(taskRef);
-      return true;
-  } catch(error) {
-      console.error("Error deleting task", error);
-      return false;
+    await deleteDoc(taskRef);
+    return true;
+  } catch (error) {
+    console.error("Error deleting task", error);
+    return false;
   }
 }
 
@@ -31,37 +48,28 @@ async function EditTask(
   try {
     const taskRef = doc(base, "tasks", taskId);
     await updateDoc(taskRef, modifiedProperties);
-      console.log("Task updated");
-      return true;
+    console.log("Task updated");
+    return true;
   } catch (error) {
-      console.error("Error updating task:", error);
-      return false;
+    console.error("Error updating task:", error);
+    return false;
   }
 }
 
-async function FetchTasks(
-  userId: Task["userId"],
-) {
-  console.log(userId);
-  
+async function FetchTasks(userId: Task["userId"]) {
   try {
-    const q = query(
-      tasksCol,
-      where("userId", "==", userId),
-    );
+    const q = query(tasksCol, where("userId", "==", userId));
     const snapshot = await getDocs(q);
-    const fetchedTasks =  snapshot.docs.map((doc) => ({
+    const fetchedTasks = snapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     })) as Task[];
     return fetchedTasks;
-    
   } catch (error) {
     console.log("Error fetching tasks:", error);
     return [];
   }
 }
-
 
 //function will be modify for pagination
 async function FetchScheduleList(userId: Task["userId"]): Promise<Task[]> {
@@ -81,7 +89,6 @@ async function FetchScheduleList(userId: Task["userId"]): Promise<Task[]> {
     return [];
   }
 }
-
 
 //fetch Scheduled task
 async function FetchScheduled(userId: Task["userId"]): Promise<Task | null> {
@@ -107,8 +114,8 @@ async function FetchScheduled(userId: Task["userId"]): Promise<Task | null> {
   }
 }
 
-
 export {
+  createMany,
   CreateTask,
   DeleteTask,
   EditTask,

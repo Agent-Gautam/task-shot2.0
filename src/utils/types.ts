@@ -4,6 +4,7 @@ import firebase from "firebase/compat/app";
 
 // Task Category Enum
 export enum TaskCategory {
+  NotSelected = -1,
   SKILL = 0,
   MAINTENANCE = 1,
   ACADEMIC = 2,
@@ -15,6 +16,7 @@ export enum TaskCategory {
 
 // Task Priority Enum
 export enum TaskPriority {
+  NotSelected = -1,
   LOW = 0,
   MEDIUM = 1,
   HIGH = 2,
@@ -40,8 +42,10 @@ export interface Task {
   category: TaskCategory;
   priority: TaskPriority;
   type: TaskType;
-  datetime: firebase.firestore.Timestamp;
+  datetime: string;
   isTimeSpecific: boolean;
   inScheduleList: boolean;
   isScheduled: boolean;
 }
+
+export type newTask = Omit<Task,'id'>

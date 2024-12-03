@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.light {
+  /* Light mode */
+  --primary: 249 204 72;
+  --secondary: 47 69 93;
+  --accent: 242 169 34;
+  --base: 245 246 248;
+  --base200: 243 232 190;
+  --neutral: 233 236 241;
+  --text: 
+}
+
+.dark {
+  /* Dark mode */
+  --primary: 249 204 72;
+  --secondary: 47 69 93;
+  --accent: 248 219 138;
+  --base: 20 26 38;
+  --base200: 29 40 58;
+  --neutral: 125 113 78;
+  --text: 253 252 248;
+}

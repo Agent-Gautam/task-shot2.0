@@ -13,26 +13,32 @@ const Navigation = ({
     { id: 2, text: "Completed", icon: <LuListChecks size={20} /> },
   ];
   return (
-    <nav className="w-full md:mt-48">
-      <ul className="w-full flex lg:flex-col lg:h-[220px] justify-between">
+    <nav className="w-full lg:mt-48 p-3">
+      <ul className="w-full flex lg:flex-col lg:h-[200px] justify-between">
         {navlinks.map((obj) => (
           <li
             key={obj.id}
-            className={`w-[20%] md:w-full p-1 md:h-[50px] text-sm border-2 border-gray-300 rounded-lg  md:text-background ${
-              tab === obj.id &&
-              "bg-secondary text-background md:bg-background md:text-secondary flex-1 md:flex-none"
+            className={`w-[20%] lg:w-full p-1 lg:h-[50px] text-sm rounded-lg ${
+              tab === obj.id ? "bg-secondary text-base flex-1 lg:flex-none" : "lg:bg-neutral"
             }`}
           >
             <button
-              className="w-full h-full flex items-center px-3 py-1 md:py-0"
+              className="w-full h-full flex items-center px-3 py-1 lg:py-0 backdrop-blur-lg"
               onClick={() => setTab(obj.id)}
               title={obj.text}
             >
-              {obj.icon}
-              <span className={`hidden md:block ml-2`}>{obj.text}</span>
-              {tab === obj.id && (
-                <span className={`ml-2 md:hidden`}>{obj.text}</span>
-              )}
+              <span
+                className={`${tab == obj.id ? "text-base" : "text-accent"}`}
+              >
+                {obj.icon}
+              </span>
+              <span
+                className={` ${
+                  tab == obj.id ? "block text-base" : "hidden lg:block text-accent lg:text-black"
+                } ml-2 `}
+              >
+                {obj.text}
+              </span>
             </button>
           </li>
         ))}
