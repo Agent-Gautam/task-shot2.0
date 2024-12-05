@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FaCaretDown, MdClose } from "../utils/reactIcons";
+import { AnimatePresence, motion } from "motion/react";
 
 export default function Select({
   options,
@@ -47,29 +48,34 @@ export default function Select({
           </button>
         )}
       </div>
-      <div
-        className={`text-sm absolute left-0 top-[110%] flex flex-wrap gap-1 backdrop-blur-lg rounded-lg overflow-auto z-50 ${
-          open ? "visible" : "hidden"
-        } `}
-      >
-        {options.map((opt, id) => (
-          <button
-            onClick={() => {
-              setItem(opt.id);
-              setOpen(false);
-            }}
-            key={`${title + id}`}
-            title={opt.text}
-            className="w-full flex items-center gap-2 hover:bg-neutral"
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ height: 0 }}
+            animate={{ height: "auto" }}
+            exit={{ height: 0 }}
+            className={`text-sm absolute left-0 top-[110%] flex flex-wrap gap-1 backdrop-blur-lg rounded-lg overflow-hidden z-50 `}
           >
-            {title == "Priority" && (
-              <div className={`w-3 h-3 rounded-full ${opt.colorClass}`} />
-            )}
-            {opt.icon}
-            <h1 className="text-xs">{opt.text}</h1>
-          </button>
-        ))}
-      </div>
+            {options.map((opt, id) => (
+              <button
+                onClick={() => {
+                  setItem(opt.id);
+                  setOpen(false);
+                }}
+                key={`${title + id}`}
+                title={opt.text}
+                className="w-full flex items-center gap-2 hover:bg-neutral"
+              >
+                {title == "Priority" && (
+                  <div className={`w-3 h-3 rounded-full ${opt.colorClass}`} />
+                )}
+                {opt.icon}
+                <h1 className="text-xs">{opt.text}</h1>
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

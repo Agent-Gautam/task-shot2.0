@@ -43,7 +43,7 @@ export const TasksProvider: FC<{ userId: string; children: ReactNode }> = ({
     try {
       const isCreated = await CreateTask(newTask);
       if (isCreated) {
-        setTasks((prevTasks) => [...prevTasks, newTask]);
+        setTasks((prevTasks) => [newTask, ...prevTasks]);
         return true;
       }
     } catch (error) {

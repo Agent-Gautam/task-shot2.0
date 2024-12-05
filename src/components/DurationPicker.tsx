@@ -10,7 +10,6 @@ const DurationPicker = ({ duration, setDuration }: {duration: Task['duration'], 
     };
   return (
     <div
-      id="row-3"
       className="w-full flex flex-row justify-between items-center"
       title="Duration of task"
     >
@@ -22,7 +21,7 @@ const DurationPicker = ({ duration, setDuration }: {duration: Task['duration'], 
         id="duration"
         className="relative flex flex-row items-center gap-3"
       >
-        <div title="hours">
+        <div title="Hours" className="flex gap-1">
           <input
             type="number"
             name="hour"
@@ -35,18 +34,10 @@ const DurationPicker = ({ duration, setDuration }: {duration: Task['duration'], 
             value={duration.hour}
             onChange={handleChange}
           />
-          <span
-            className="text-md"
-          >
-            h
-          </span>
+          <span className="text-md">h</span>
         </div>
-        <span
-          className="text-xl font-bold"
-        >
-          :
-        </span>
-        <div>
+        <span className="text-xl font-bold">:</span>
+        <div title="Minutes" className="flex gap-1">
           <input
             type="number"
             name="min"
@@ -58,11 +49,7 @@ const DurationPicker = ({ duration, setDuration }: {duration: Task['duration'], 
             value={duration.min}
             onChange={handleChange}
           />
-          <span
-            className="text-md"
-          >
-            m
-          </span>
+          <span className="text-md">m</span>
         </div>
       </div>
     </div>

@@ -4,6 +4,8 @@ import "keen-slider/keen-slider.min.css";
 import { useKeenSlider } from "keen-slider/react";
 import TaskShow from "./TaskShow";
 import SubTabs from "./SubTabs";
+import { AnimatePresence, motion } from "motion/react";
+import NoTask from "./NoTask";
 
 const TasksContainer = ({ tasks }: { tasks: Task[] }) => {
   const [subTab, setSubTab] = useState(0);
@@ -52,21 +54,31 @@ const TasksContainer = ({ tasks }: { tasks: Task[] }) => {
         id="desktop"
         className="w-full hidden lg:block columns-[300px] p-6 space-y-3 overflow-auto"
       >
-        {subtabs[subTab].tasks?.map((task) => (
-          <TaskShow task={task} />
-        ))}
+        <AnimatePresence>
+          {subtabs[subTab].tasks?.map((task, id) => (
+            <TaskShow key={task.id} task={task} ind={id} />
+          ))}
+        </AnimatePresence>
       </div>
       <div id="mobile" className="flex-1 overflow-auto lg:hidden">
         <div ref={sliderRef} className="keen-slider">
           {subtabs.map((subtab, idx) => (
-            <div
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1, transition: { staggerChildren: 0.9 } }}
               key={idx}
               className="keen-slider__slide h-full flex flex-col items-center gap-3 p-6"
             >
-              {subtab.tasks?.map((task) => (
-                  <TaskShow task={task} />
-              ))}
-            </div>
+              <AnimatePresence>
+                {subtab.tasks.length > 0 ? (
+                  subtab.tasks.map((task, id) => (
+                    <TaskShow key={task.id} ind={id} task={task} />
+                  ))
+                ) : (
+                  <NoTask />
+                )}
+              </AnimatePresence>
+            </motion.div>
           ))}
         </div>
       </div>

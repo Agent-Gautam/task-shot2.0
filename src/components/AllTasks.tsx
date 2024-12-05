@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { useTasksContext } from "../utils/TasksContext";
 import TasksContainer from "./TasksContainer";
+import LoadingTask from "./LoadingTask";
 
 const AllTasks = ({ tab }: { tab: number }) => {
   const context = useTasksContext();
@@ -18,7 +19,7 @@ const AllTasks = ({ tab }: { tab: number }) => {
   const selectedTasks = tasksByType[tab] || [];
 
   return (
-    <div className={`w-full h-full lg:h-[calc(100%-90px)]`}>
+    <div className={`w-full h-full`}>
       <TasksContainer tasks={selectedTasks} />
     </div>
   );

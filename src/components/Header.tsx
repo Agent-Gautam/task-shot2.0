@@ -5,7 +5,7 @@ const Header = ({tab, setTab, toggleSearch, toggleCreate}) => {
   return (
     <aside
       id="pane1"
-      className="w-full lg:w-[20%] h-[170px] lg:h-full bg-base rounded-lg flex flex-col items-center shadow-xl"
+      className="w-full lg:w-[20%] h-[170px] lg:h-full bg-base rounded-lg flex flex-col items-center lg:shadow-xl"
     >
       <header className="lg:relative w-full h-[50px] lg:h-auto flex lg:flex-col items-center justify-between mb-16 lg:mb-0 bg-primary p-4 ">
         <h1 className="text-semibold text-2xl">Task Scheduler</h1>

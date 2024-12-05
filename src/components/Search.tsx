@@ -6,6 +6,8 @@ import Select from "./Select";
 import { Task } from "../utils/types";
 import { categoryOptions, priorityOptions } from "@/utils/SharedContent";
 import { MdClose, MdOutlineFilterList } from "../utils/reactIcons";
+import { motion } from "motion/react";
+import { inertia } from "motion";
 
 export default function Search({ closeSearch }: { closeSearch: () => void }) {
   // State initialization
@@ -103,7 +105,10 @@ export default function Search({ closeSearch }: { closeSearch: () => void }) {
   };
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0}}
+      animate={{ opacity: 1 }}
+      exit={{opacity: 0}}
       className="absolute top-0 left-0 w-full backdrop-blur-xl h-full px-3 py-1 rounded-xl flex flex-col items-center z-50"
       onClick={() => closeSearch()}
     >
@@ -126,21 +131,23 @@ export default function Search({ closeSearch }: { closeSearch: () => void }) {
             className="p-2 border rounded-lg w-full bg-gray-50"
             placeholder=" Search tasks..."
           />
-          <button
-            className="p-2 bg-secondary text-white rounded-full"
+          <motion.button
+            initial={{ boxShadow: "1px 2px black" }}
+            whileTap={{boxShadow: "none", scale: 0.9}}
+            className="p-2 bg-secondary text-white rounded-full shadow-2xl"
             onClick={toggleFilterMenu}
             title="Toggle Filters"
           >
             <MdOutlineFilterList size={24} />
-          </button>
+          </motion.button>
         </div>
 
         {/* Filter Menu */}
         {isFilterMenuVisible && (
-          <div className="p-4 bg-white rounded-lg shadow-md flex flex-col lg:flex-row gap-4">
+          <div className="p-4 bg-white rounded-lg shadow-md flex flex-col lg:flex-row flex-wrap gap-4">
             {/* Search in Section */}
+            <p className="text-sm font-semibold text-gray-700">Search in:</p>
             <div className="flex gap-2 items-center">
-              <p className="text-sm font-semibold text-gray-700">Search in:</p>
               <button
                 onClick={() =>
                   setSearchInputs((prev) => ({
@@ -150,8 +157,8 @@ export default function Search({ closeSearch }: { closeSearch: () => void }) {
                 }
                 className={`p-2 rounded-md text-white ${
                   searchInputs.isDescriptionOn
-                    ? "bg-secondary"
-                    : "bg-secondary/50"
+                    ? "bg-secondary scale-1"
+                    : "bg-secondary/50 scale-90"
                 }`}
               >
                 Description
@@ -164,7 +171,7 @@ export default function Search({ closeSearch }: { closeSearch: () => void }) {
                   }))
                 }
                 className={`p-2 rounded-md text-white ${
-                  searchInputs.isDurationOn ? "bg-secondary" : "bg-secondary/50"
+                  searchInputs.isDurationOn ? "bg-secondary scale-1" : "bg-secondary/50 scale-90"
                 }`}
               >
                 Duration
@@ -177,7 +184,7 @@ export default function Search({ closeSearch }: { closeSearch: () => void }) {
                   }))
                 }
                 className={`p-2 rounded-md text-white ${
-                  searchInputs.isDateTimeOn ? "bg-secondary" : "bg-secondary/50"
+                  searchInputs.isDateTimeOn ? "bg-secondary scale-1" : "bg-secondary/50 scale-90"
                 }`}
               >
                 DateTime
@@ -205,14 +212,16 @@ export default function Search({ closeSearch }: { closeSearch: () => void }) {
             </div>
 
             {/* Clear Filters Button */}
-            <button
+            <motion.button
+              initial={{ scale: 1 }}
+              whileTap={{scale: 1.2}}
               onClick={clearFilters}
-              className="place-self-end p-2 bg-accent text-secondary rounded-xl flex items-center"
+              className="self-end p-2 bg-accent text-secondary rounded-xl flex items-center"
               title="Clear Filters"
             >
-              <span><MdClose size={30} /></span>
+              <span><MdClose size={25} /></span>
               <h2 className="text-lg">Clear</h2>
-            </button>
+            </motion.button>
           </div>
         )}
 
@@ -224,6 +233,6 @@ export default function Search({ closeSearch }: { closeSearch: () => void }) {
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

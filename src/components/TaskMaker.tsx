@@ -9,6 +9,7 @@ import DurationPicker from "./DurationPicker";
 import Select from "./Select";
 import { useTasksContext } from "@/utils/TasksContext";
 import { categoryOptions, priorityOptions } from "@/utils/SharedContent";
+import { AnimatePresence, motion } from "motion/react";
 
 function TaskMaker({
   userId,
@@ -101,14 +102,14 @@ function TaskMaker({
 
       if (Object.keys(modifiedProperties).length > 0) {
         const success = await updateTask(taskInitials.id, modifiedProperties);
-        success && alert("Task updated successfully!");
+        // success && alert("Task updated successfully!");
       } else {
         alert("No changes detected.");
       }
     } else {
       // Create new task
       const success = await createTask(taskState as Task); // Ensure the state is cast as `Task`
-      success && alert("Task created successfully!");
+      // success && alert("Task created successfully!");
     }
 
     setTaskState(defaultTaskState); // Reset the form
@@ -116,9 +117,12 @@ function TaskMaker({
 
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
       id="addtask"
-      className="absolute top-0 left-0 w-full h-full z-50 flex justify-center pt-24 bg-black/30 "
+      className="absolute top-0 left-0 w-full h-full z-50 flex justify-center pt-24 bg-black/30"
       onClick={() => setOpen(false)}
     >
       <div
@@ -192,15 +196,22 @@ function TaskMaker({
               <LuCalendarOff size={30} color="#355070ff" />
             )}
           </button>
-          <input
-            type="datetime-local"
-            name="datetime"
-            id="datetime"
-            className="bg-inherit w-[190px] outline-none focus:border-2 border-secondary p-2 rounded-lg"
-            value={taskState.datetime}
-            onChange={handleChange}
-            required={taskState.isTimeSpecific}
-          />
+          <AnimatePresence>
+            {taskState.isTimeSpecific && (
+              <motion.input
+                initial={{ x: -50, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: -50, opacity: 0 }}
+                type="datetime-local"
+                name="datetime"
+                id="datetime"
+                className="bg-inherit w-[190px] outline-none focus:border-2 border-secondary rounded-lg"
+                value={taskState.datetime}
+                onChange={handleChange}
+                required={taskState.isTimeSpecific}
+              />
+            )}
+          </AnimatePresence>
         </div>
         <div className="w-full flex items-center gap-2">
           <button
@@ -223,7 +234,7 @@ function TaskMaker({
           </button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

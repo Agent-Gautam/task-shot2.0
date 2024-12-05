@@ -1,4 +1,5 @@
 import { LuLayoutList, LuListChecks, LuListX } from "react-icons/lu";
+import {motion} from "motion/react"
 
 const Navigation = ({
   tab,
@@ -16,10 +17,11 @@ const Navigation = ({
     <nav className="w-full lg:mt-48 p-3">
       <ul className="w-full flex lg:flex-col lg:h-[200px] justify-between">
         {navlinks.map((obj) => (
-          <li
+          <motion.li
+            layout
             key={obj.id}
             className={`w-[20%] lg:w-full p-1 lg:h-[50px] text-sm rounded-lg ${
-              tab === obj.id ? "bg-secondary text-base flex-1 lg:flex-none" : "lg:bg-neutral"
+              tab === obj.id ? "bg-secondary text-base flex-1 lg:flex-none" : "lg:bg-neutral shadow-inner"
             }`}
           >
             <button
@@ -40,7 +42,7 @@ const Navigation = ({
                 {obj.text}
               </span>
             </button>
-          </li>
+          </motion.li>
         ))}
       </ul>
     </nav>
