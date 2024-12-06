@@ -53,7 +53,7 @@ function toMinutes(durationObj: {hour: number, min: number}): number {
 export function scheduleTask(
   taskList: Task[],
   inputTime: Task['duration']
-): Task{
+): Task|null{
   const [timeSpecificTasks, nonTimeSpecificTasks] = timesort(taskList);
 
   // Condition: If tasks are time-specific and within the next 5 minutes
@@ -80,7 +80,8 @@ export function scheduleTask(
   if (nonTimeSpecificTasks.length > 0) {
     console.log("Chosen by priority");
     return chooseByPriority(nonTimeSpecificTasks);
-    }
+  }
+  return null;
 }
 
 // **7. Check if a task is expired:** Determine if the task's duration has passed since its scheduled time.

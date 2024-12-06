@@ -105,19 +105,17 @@ useEffect(() => {
 
     if (taskInitials?.id) {
       // Update existing task
-      const allProperties = Object.keys(taskState);
-      const modifiedProperties = allProperties.reduce<Partial<Task>>(
-        (acc, property) => {
-          if (
-            taskState[property] !==
-            taskInitials[property as keyof Task]
-          ) {
-            acc[property as keyof Task] = taskState[property as keyof Task];
-          }
-          return acc;
-        },
-        {}
-      );
+      const currentTaskState  = taskState as Task;
+      const allProperties = Object.keys(currentTaskState);
+      const modifiedProperties: Record<string, any> = {};
+      allProperties.forEach((property) => {
+        if (
+          currentTaskState[property as keyof Task] !== taskInitials[property as keyof Task]
+        ) {
+          modifiedProperties[property] =
+            currentTaskState[property as keyof Task];
+        }
+      });
 
       if (Object.keys(modifiedProperties).length > 0) {
         const success = await updateTask(taskInitials.id, modifiedProperties);

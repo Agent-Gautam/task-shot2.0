@@ -137,7 +137,7 @@ export default function Schedule({
 
   // Handle scheduling a task
   function handleShot() {
-    let proposedTask: Task;
+    let proposedTask: Task|null;
     if (
       (inputDuration.min !== 0 || inputDuration.hour !== 0) &&
       allTasks.length > 0
@@ -149,7 +149,7 @@ export default function Schedule({
       alert("No task to schedule");
       return;
     }
-    updateTask(proposedTask.id, { isScheduled: true });
+    if ( proposedTask )updateTask(proposedTask.id, { isScheduled: true });
   }
 
   // Toggle sort and reset options

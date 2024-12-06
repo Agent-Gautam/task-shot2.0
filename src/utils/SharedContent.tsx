@@ -5,10 +5,7 @@ import {
   FaHandHolding,
   LuRepeat,
   LuMonitorPlay,
-  GoTrophy,
-  FcHighPriority,
-  FcLowPriority,
-  FcMediumPriority,
+  GoTrophy
 } from "./reactIcons";
 
 const categoryOptions = [
