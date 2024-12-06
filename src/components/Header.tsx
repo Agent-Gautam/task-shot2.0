@@ -1,14 +1,24 @@
 import Navigation from "./Navigation";
 import { BsSearch } from "react-icons/bs";
 import { CgAddR } from "react-icons/cg";
-const Header = ({tab, setTab, toggleSearch, toggleCreate}) => {
+const Header = ({
+  tab,
+  setTab,
+  toggleSearch,
+  toggleCreate,
+}: {
+  tab: number;
+  setTab: React.Dispatch<React.SetStateAction<number>>;
+  toggleSearch: Function;
+  toggleCreate: Function;
+}) => {
   return (
     <aside
       id="pane1"
       className="w-full lg:w-[20%] h-[170px] lg:h-full bg-base rounded-lg flex flex-col items-center lg:shadow-xl"
     >
-      <header className="lg:relative w-full h-[50px] lg:h-auto flex lg:flex-col items-center justify-between mb-16 lg:mb-0 bg-primary p-4 ">
-        <h1 className="text-semibold text-2xl">Task Scheduler</h1>
+      <header className="lg:relative w-full h-[50px] lg:h-auto flex lg:flex-col items-center justify-between mb-[64px] lg:mb-0 bg-primary px-4 lg:py-4">
+        <h1 className="text-semibold text-2xl ">Task Scheduler</h1>
         <section
           id="action-buttons"
           className="flex lg:flex-col lg:w-full gap-2 lg:absolute  top-[110%]"
@@ -32,6 +42,6 @@ const Header = ({tab, setTab, toggleSearch, toggleCreate}) => {
       <Navigation setTab={setTab} tab={tab} />
     </aside>
   );
-}
+};
 
 export default Header

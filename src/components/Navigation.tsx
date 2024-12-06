@@ -14,7 +14,7 @@ const Navigation = ({
     { id: 2, text: "Completed", icon: <LuListChecks size={20} /> },
   ];
   return (
-    <nav className="w-full lg:mt-48 p-3">
+    <nav className="w-full lg:mt-48 px-3 py-2">
       <ul className="w-full flex lg:flex-col lg:h-[200px] justify-between">
         {navlinks.map((obj) => (
           <motion.li

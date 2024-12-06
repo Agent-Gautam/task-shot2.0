@@ -22,7 +22,7 @@ import {
   FcLowPriority,
   FcMediumPriority,
 } from "react-icons/fc";
-import { TbClockUp, TbTargetArrow } from "react-icons/tb";
+import { TbClockUp, TbTargetArrow, TbClockDown } from "react-icons/tb";
 import {
   MdOutlineEdit,
   MdClose,
@@ -51,6 +51,7 @@ export {
   FcLowPriority,
   FcMediumPriority,
   TbClockUp,
+  TbClockDown,
   MdOutlineEdit,
   AiOutlineDelete,
   SlOptions,

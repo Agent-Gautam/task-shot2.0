@@ -1,6 +1,6 @@
 import { newTask, Task } from "@/utils/types";
 import { Timestamp } from "firebase/firestore";
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import {
   LuCalendarClock,
   LuCalendarOff,
@@ -34,6 +34,7 @@ function TaskMaker({
     datetime: "",
     isScheduled: false,
   };
+  
 
   const context = useTasksContext();
   const updateTask = context.updateTask;
@@ -43,6 +44,25 @@ function TaskMaker({
   const [taskState, setTaskState] = useState<Task | newTask>(
     taskInitials || defaultTaskState
   );
+  const [disabled, setDisabled] = useState(false);
+
+useEffect(() => {
+  // Define the debounce function
+  const debounceValidation = setTimeout(() => {
+    if (
+      !taskState.description ||
+      taskState.priority === -1 ||
+      taskState.category === -1
+    ) {
+      setDisabled(true);
+    } else {
+      setDisabled(false);
+    }
+  }, 300); // Debounce delay (adjust as needed)
+
+  // Cleanup the timeout on dependency change
+  return () => clearTimeout(debounceValidation);
+}, [taskState]);
 
   // Handle input changes
   const handleChange = (
@@ -71,29 +91,28 @@ function TaskMaker({
       [name]: value,
     }));
   };
+  console.log(taskState.isTimeSpecific)
 
   // Handle form submission
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     // Validation for required fields
-    if (
-      !taskState.description ||
-      taskState.priority === -1 ||
-      taskState.category === -1
-    ) {
+    if (disabled) {
       alert("Please fill out all required fields.");
       return;
     }
 
     if (taskInitials?.id) {
       // Update existing task
-      const modifiedProperties = Object.keys(taskState).reduce<Partial<Task>>(
-        (acc, key) => {
+      const allProperties = Object.keys(taskState);
+      const modifiedProperties = allProperties.reduce<Partial<Task>>(
+        (acc, property) => {
           if (
-            taskState[key as keyof Task] !== taskInitials[key as keyof Task]
+            taskState[property] !==
+            taskInitials[property as keyof Task]
           ) {
-            acc[key as keyof Task] = taskState[key as keyof Task];
+            acc[property as keyof Task] = taskState[property as keyof Task];
           }
           return acc;
         },
@@ -102,14 +121,15 @@ function TaskMaker({
 
       if (Object.keys(modifiedProperties).length > 0) {
         const success = await updateTask(taskInitials.id, modifiedProperties);
-        // success && alert("Task updated successfully!");
+        console.log(success);
       } else {
         alert("No changes detected.");
       }
     } else {
       // Create new task
       const success = await createTask(taskState as Task); // Ensure the state is cast as `Task`
-      // success && alert("Task created successfully!");
+      console.log(success);
+      
     }
 
     setTaskState(defaultTaskState); // Reset the form
@@ -220,18 +240,16 @@ function TaskMaker({
           >
             Close
           </button>
-          <button
+          <motion.button
+            initial={{ scale: 1 }}
+            whileTap={{scale: !disabled ? 0.9 : 1}}
             type="submit"
             onClick={handleSubmit}
-            disabled={
-              !taskState.description ||
-              taskState.priority === -1 ||
-              taskState.category === -1
-            }
+            disabled={disabled}
             className="bg-secondary text-base flex-1 h-[40px] rounded-xl disabled:bg-gray-300"
           >
             Save
-          </button>
+          </motion.button>
         </div>
       </div>
     </motion.div>

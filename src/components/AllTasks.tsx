@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 import { useTasksContext } from "../utils/TasksContext";
 import TasksContainer from "./TasksContainer";
-import LoadingTask from "./LoadingTask";
 
 const AllTasks = ({ tab }: { tab: number }) => {
   const context = useTasksContext();

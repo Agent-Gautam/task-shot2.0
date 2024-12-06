@@ -10,14 +10,13 @@ import {
 } from "firebase/firestore";
 import { newTask, Task } from "./types.ts";
 import { base, tasksCol } from "./firebase.ts";
-import mocktasks from "./Mockdata.ts";
 
-async function createMany() {
-  mocktasks.forEach(async (task: Task) => {
-    await addDoc(tasksCol, task);
-    console.log("created : ", task.description);
-  });
-}
+// async function createMany() {
+//   mocktasks.forEach(async (task: Task) => {
+//     await addDoc(tasksCol, task);
+//     console.log("created : ", task.description);
+//   });
+// }
 
 //check validation in frontend
 async function CreateTask(task: newTask) {
@@ -45,6 +44,7 @@ async function EditTask(
   taskId: Task["id"],
   modifiedProperties: Partial<Task>
 ): Promise<boolean> {
+  console.log(taskId)
   try {
     const taskRef = doc(base, "tasks", taskId);
     await updateDoc(taskRef, modifiedProperties);
@@ -115,7 +115,6 @@ async function FetchScheduled(userId: Task["userId"]): Promise<Task | null> {
 }
 
 export {
-  createMany,
   CreateTask,
   DeleteTask,
   EditTask,

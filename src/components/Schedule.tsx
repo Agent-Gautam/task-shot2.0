@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import LoadingTask from "./LoadingTask";
 import {
   MdDone,
   MdOutlineFilterList,
@@ -20,8 +19,9 @@ import TaskShow from "./TaskShow";
 import { categoryOptions, priorityOptions } from "@/utils/SharedContent";
 import TasksContainer from "./TasksContainer";
 import { Task } from "@/utils/types";
-import { motion, AnimatePresence, Reorder } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { spring } from "motion";
+//apply reorder to the list using motion's Reorder
 
 export default function Schedule({
   isOpen,
@@ -41,7 +41,7 @@ export default function Schedule({
     [allTasks]
   );
 
-  const [scheduledTask, setScheduledTask] = useState<Task>();
+  const [scheduledTask, setScheduledTask] = useState<Task|null>();
   const [scheduleList, setScheduleList] = useState<Task[]>(tasksInScheduler);
 
   const [isSortOpen, setSortOpen] = useState(false);
@@ -86,12 +86,8 @@ export default function Schedule({
       filteredTasks.sort((a, b) => {
         if (sortOptions.sortBy === "duration") {
           // Correctly calculate duration in minutes
-          const durationA =
-            parseInt(a.duration.hour || "0") * 60 +
-            parseInt(a.duration.min || "0");
-          const durationB =
-            parseInt(b.duration.hour || "0") * 60 +
-            parseInt(b.duration.min || "0");
+          const durationA = a.duration.hour * 60 + a.duration.min;
+          const durationB = b.duration.hour * 60 + b.duration.min;
           return sortOptions.sortOrder === "asc"
             ? durationA - durationB
             : durationB - durationA;
@@ -170,90 +166,82 @@ export default function Schedule({
   }
 
   const scheduledButtons = (
-    <div
+    <motion.div
+      layout
       id="scheduledButtons"
-      className={` flex ${!isOpen ? "flex-row w-24 " : "flex-col h-full"
-        } justify-around`}
+      className={` flex justify-around ${
+        !isOpen ? "flex-row w-24 h-auto gap-2" : "flex-col h-[100px]"
+      }`}
     >
       <button
-        onClick={() =>
-          updateTask(scheduledTask?.id, {
-            isScheduled: false,
-            type: 2,
-            inScheduleList: false,
-          })
-        }
+        onClick={() => {
+          const scheduledTaskId = scheduledTask?.id;
+          if (scheduledTaskId) {
+            updateTask(scheduledTaskId, {
+              isScheduled: false,
+              type: 2,
+              inScheduleList: false,
+            });
+            setScheduledTask(null);
+          }
+        }}
         className="rounded-lg bg-secondary text-base py-1 px-2"
       >
         <MdDone />
       </button>
       <button
         className="px-2 py-1 bg-accent text-white rounded-lg"
-        onClick={() => updateTask(scheduledTask.id, { isScheduled: false })}
+        onClick={() => {
+          const scheduledTaskId = scheduledTask?.id;
+          if (scheduledTaskId) {
+            updateTask(scheduledTask.id, { isScheduled: false });
+            setScheduledTask(null);
+          }
+        }}
       >
         <MdClose />
       </button>
-    </div>
+    </motion.div>
   );
   const unScheduledWindow = (
     <>
-      <motion.div exit={{scale: 0, opacity: 0}} className="bg-white/40 px-4 py-3 w-60 rounded-xl">
+      <motion.div
+        exit={{ scale: 0, opacity: 0 }}
+        className="bg-white/40 px-4 py-3 w-60 rounded-xl"
+      >
         <DurationPicker
           duration={inputDuration}
           setDuration={setInputDuration}
         />
       </motion.div>
-      <button
-        className={`bg-accent text-secondary font-semibold text-lg py-2 px-3 rounded-lg flex items-center gap-5`}
+      <motion.button
+        initial={{ scale: 1, boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)" }}
+        whileTap={{
+          scale: 0.9,
+          boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
+        }}
+        className={`bg-accent text-secondary font-semibold py-2 px-3 h-[50px] rounded-full flex items-center gap-5`}
         onClick={handleShot}
       >
-        <TbTargetArrow size={20} />
-        <p className={``}>Shot task</p>
-      </button>
+        <TbTargetArrow
+          size={30}
+          className="w-full h-full sm:w-auto sm:h-auto"
+        />
+        <p className={`hidden sm:block text-sm lg:text-lg`}>Shot task</p>
+      </motion.button>
     </>
   );
-  const scheduledClosedWindow = (
-    <motion.div initial={{scale: 0, opacity: 0}} animate={{scale: 1, opacity: 1}} className="relative flex py-3 pr-4 pl-6 gap-2 items-center backdrop-blur-xl bg-white/30 rounded-md">
-      <div
-        id="priority"
-        className={`absolute top-0 left-2 rounded-full w-2 h-full ${priorityOptions[scheduledTask?.priority]?.colorClass
-          }`}
-      />
-      {categoryOptions[scheduledTask?.category]?.icon}
-      <p>{scheduledTask?.description}</p>
-    </motion.div>
-  );
-  const upperClosed = (
+
+  const upperWindow = (
     <motion.div
       layout
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      id="upper-closed"
-      className={`w-full flex justify-center items-center gap-5 mb-1 h-full`}
-    >
-      <AnimatePresence>
-        {scheduledTask ? (
-          <>
-            {scheduledClosedWindow}
-            {scheduledButtons}
-          </>
-        ) : (
-          unScheduledWindow
-        )}
-      </AnimatePresence>
-    </motion.div>
-  );
-
-  const upperOpened = (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 0.3 }}
-      className={`w-full flex justify-center items-center gap-5 h-[120px]`}
+      className={`w-full flex justify-center items-center gap-5 max-h-[120px] p-2 ${isAnimating && "text-transparent"} ${isOpen ? "h-[120px] pb-0" : "h-[65px]"}`}
     >
       {scheduledTask ? (
         <>
-          <TaskShow ind={0} task={scheduledTask} />
+          <TaskShow ind={0} task={scheduledTask} closed={!isOpen} />
           {scheduledButtons}
         </>
       ) : (
@@ -272,18 +260,18 @@ export default function Schedule({
         setIsAnimating(false);
       }}
       id="scheduler"
-      className={`absolute  lg:top-0 left-0 w-full bg-primary flex flex-col items-center rounded-b-xl p-2 shadow-xl z-50 ${
+      className={`absolute lg:top-0 left-0 w-full bg-primary flex flex-col items-center rounded-b-xl shadow-xl z-50 ${
         isOpen
           ? "h-[calc(100vh-20px)] lg:h-full -top-[165px]"
-          : "h-[65px] -top-[120px]"
+          : "h-[65px] -top-[128px]"
       }`}
     >
-      <motion.div className="relative w-full h-full">
-        <AnimatePresence>{isOpen ? upperOpened : upperClosed}</AnimatePresence>
+      <div className="relative w-full h-full">
+        {upperWindow}
         {isOpen && (
           <div
             id="filter-and-sort"
-            className={`relative w-full flex justify-between gap-3 text-secondary`}
+            className={`relative w-full flex justify-between gap-3 text-secondary px-2`}
           >
             <button
               className="bg-tertiary p-3 rounded-lg"
@@ -366,20 +354,20 @@ export default function Schedule({
         )}
         {isOpen && (
           <motion.div
-            className=" w-full h-[calc(100%-164px)] "
+            className=" w-full h-[calc(100%-164px)] px-2 pb-2 "
           >
             <TasksContainer tasks={scheduleList} />
           </motion.div>
         )}
         {!isAnimating && (
           <button
-            className="absolute -bottom-5 left-[50%] -translate-x-[50%] px-2 z-40 bg-primary rounded-b-full"
+            className="absolute -bottom-3 left-[50%] -translate-x-[50%] px-2 bg-primary rounded-b-full"
             onClick={() => setOpen(!isOpen)}
           >
             {isOpen ? <FaChevronUp /> : <FaChevronDown />}
           </button>
         )}
-      </motion.div>
+      </div>
     </motion.div>
   );
 }

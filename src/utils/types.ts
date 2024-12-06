@@ -1,6 +1,6 @@
-import firebase from "firebase/compat/app";
-
 // Enum Definitions
+
+import { Timestamp } from "firebase/firestore";
 
 // Task Category Enum
 export enum TaskCategory {
@@ -33,7 +33,7 @@ export enum TaskType {
 export interface Task {
   userId: string; // Firestore document ID of the user
   id: string; // Firestore document ID of the task
-  createdAt: firebase.firestore.Timestamp;
+  createdAt: Timestamp;
   description: string;
   duration: {
     hour: number;

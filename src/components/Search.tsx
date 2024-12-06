@@ -7,7 +7,6 @@ import { Task } from "../utils/types";
 import { categoryOptions, priorityOptions } from "@/utils/SharedContent";
 import { MdClose, MdOutlineFilterList } from "../utils/reactIcons";
 import { motion } from "motion/react";
-import { inertia } from "motion";
 
 export default function Search({ closeSearch }: { closeSearch: () => void }) {
   // State initialization

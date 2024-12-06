@@ -14,7 +14,9 @@ const App: React.FC = () => {
   const [scheduleOpen, setScheduleOpen] = useState(false);
   return (
     <TasksProvider userId="user123">
-      <div className="flex flex-col lg:flex-row w-full h-screen light lg:gap-5 lg:p-5 bg-base200">
+      <div
+        className={`flex flex-col lg:flex-row w-full h-screen light lg:gap-5 lg:p-5 bg-base200`}
+      >
         <Header
           tab={tab}
           setTab={setTab}

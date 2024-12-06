@@ -1,4 +1,4 @@
-import React, {
+import {
   createContext,
   useState,
   useEffect,
@@ -41,9 +41,10 @@ export const TasksProvider: FC<{ userId: string; children: ReactNode }> = ({
 
   const createTask = async (newTask: newTask) => {
     try {
-      const isCreated = await CreateTask(newTask);
-      if (isCreated) {
-        setTasks((prevTasks) => [newTask, ...prevTasks]);
+      const taskId = await CreateTask(newTask);
+      if (taskId) {
+        const taskToAdd: Task = {id: taskId, ...newTask}
+        setTasks((prevTasks) => [taskToAdd, ...prevTasks]);
         return true;
       }
     } catch (error) {

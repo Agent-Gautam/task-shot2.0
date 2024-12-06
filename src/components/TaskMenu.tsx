@@ -1,11 +1,13 @@
-import { MdOutlineEdit, TbClockUp, AiOutlineDelete } from "../utils/reactIcons";
+import { MdOutlineEdit, TbClockUp, TbClockDown, AiOutlineDelete } from "../utils/reactIcons";
 import { useTasksContext } from "@/utils/TasksContext";
 
 const TaskMenu = ({
   taskId,
+  isTaskInScheduleList,
   setEditOpen,
 }: {
   taskId: string;
+  isTaskInScheduleList: boolean;
   setEditOpen: () => void;
 }) => {
   //edit
@@ -20,9 +22,9 @@ const TaskMenu = ({
     },
     {
       name: "Schedule",
-      icon: <TbClockUp size={20} />,
+      icon: isTaskInScheduleList ? <TbClockDown /> : <TbClockUp size={20} />,
       fun: () => {
-        updateTask(taskId, { inScheduleList: true });
+        updateTask(taskId, { inScheduleList: !isTaskInScheduleList });
       },
     },
     {

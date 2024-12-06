@@ -1,6 +1,7 @@
+import { Task } from "@/utils/types";
 import Select from "./Select";
 
-const SubTabs = ({ changeSubTab, subtabs, selectedTab }) => {
+const SubTabs = ({ changeSubTab, subtabs, selectedTab }: {changeSubTab: Function, subtabs: {id: number, text: string, tasks: Task[]}[],selectedTab: number}) => {
   return (
     <div className="">
       <div
