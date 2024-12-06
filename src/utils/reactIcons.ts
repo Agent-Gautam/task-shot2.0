@@ -4,8 +4,6 @@ import { GiAutoRepair } from "react-icons/gi";
 import {
   FaCaretDown,
   FaHandHolding,
-  FaSortUp,
-  FaSortDown,
   FaChevronDown,
   FaChevronUp,
   FaRandom,
@@ -15,6 +13,7 @@ import {
   LuCalendarClock,
   LuCalendarOff,
   LuMonitorPlay,
+  LuList
 } from "react-icons/lu";
 import { GoTrophy } from "react-icons/go";
 import {
@@ -34,9 +33,11 @@ import {
 import { AiOutlineDelete } from "react-icons/ai";
 import { SlOptions } from "react-icons/sl";
 import { PiEmptyBold } from "react-icons/pi";
-import { TiTick } from "react-icons/ti";
+import { TiTick, TiArrowSortedUp, TiArrowSortedDown } from "react-icons/ti";
+import { BsHourglassSplit } from "react-icons/bs";
 
 export {
+  BsHourglassSplit,
   LuCalendarClock,
   LuCalendarOff,
   RiUserStarLine,
@@ -46,6 +47,7 @@ export {
   FaHandHolding,
   LuRepeat,
   LuMonitorPlay,
+  LuList,
   GoTrophy,
   FcHighPriority,
   FcLowPriority,
@@ -59,13 +61,13 @@ export {
   PiEmptyBold,
   MdOutlineFilterList,
   TiTick,
-  FaSortUp,
-  FaSortDown,
+  TiArrowSortedUp,
+  TiArrowSortedDown,
   FaChevronDown,
   FaChevronUp,
   FaRandom,
   MdDone,
   MdOutlineDoneOutline,
   MdOutlineFilterListOff,
-  TbTargetArrow
+  TbTargetArrow,
 };

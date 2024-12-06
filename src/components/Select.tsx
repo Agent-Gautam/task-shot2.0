@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FaCaretDown, MdClose } from "../utils/reactIcons";
 import { AnimatePresence, motion } from "motion/react";
+import { Task } from "@/utils/types";
 
 export default function Select({
   options,
@@ -9,10 +10,10 @@ export default function Select({
   title,
 }: {
   options: {
-    icon?: React.JSX.Element;
-    colorClass?: string;
+    icon: React.JSX.Element;
     text: string;
     id: number;
+    tasks?: Task[]
   }[];
   selectedItem: number;
   setItem: Function;
@@ -23,24 +24,26 @@ export default function Select({
     <div
       title={title}
       role="select"
-      className={`w-full relative rounded-lg cursor-pointer`}
+      className={`relative rounded-lg cursor-pointer`}
     >
-      <div className="bg-white/50 w-full text-secondary flex rounded-full py-1 px-2">
+      <div className=" w-full text-secondary flex gap-1 divide-x rounded-full py-1 px-1 md:px-2 bg-base/50">
         <button
-          className=" rounded-l-full w-full"
+          className="rounded-l-full flex items-center gap-2"
           id="selected"
           onClick={() => setOpen(!open)}
         >
-          <h1 className="rounded-lg flex items-center gap-2">
-            {selectedItem == -1 ? (
-              title
-            ) : (
-              <span className="flex gap-2 items-center">
-                {options[selectedItem]?.icon} {options[selectedItem].text}
-              </span>
-            )}
-            <FaCaretDown className={` ${open && "rotate-180 "}`} />
-          </h1>
+          <span className="scale-125">{options[selectedItem]?.icon}</span>
+          <span className="hidden md:block">
+            {selectedItem == -1 ? title : options[selectedItem].text}
+          </span>
+          {selectedItem == -1 ? (
+            <span>{title}</span>
+          ) : (
+            <span className="hidden md:block">
+              {options[selectedItem].text}
+            </span>
+          )}
+          <FaCaretDown className={` ${open && "rotate-180 "}`} />
         </button>
         {selectedItem !== -1 && title !== "Tab" && (
           <button className="rounded-r-full" onClick={() => setItem(-1)}>
@@ -66,9 +69,6 @@ export default function Select({
                 title={opt.text}
                 className="w-full flex items-center gap-2 hover:bg-neutral"
               >
-                {title == "Priority" && (
-                  <div className={`w-3 h-3 rounded-full ${opt.colorClass}`} />
-                )}
                 {opt.icon}
                 <h1 className="text-xs">{opt.text}</h1>
               </button>

@@ -3,13 +3,15 @@ import {
   MdDone,
   MdOutlineFilterList,
   MdOutlineFilterListOff,
-  FaSortUp,
-  FaSortDown,
+  TiArrowSortedUp,
+  TiArrowSortedDown,
   FaChevronDown,
   FaChevronUp,
   FaRandom,
   MdClose,
   TbTargetArrow,
+  BsHourglassSplit,
+  LuCalendarClock,
 } from "../utils/reactIcons";
 import Select from "./Select";
 import DurationPicker from "./DurationPicker";
@@ -262,7 +264,7 @@ export default function Schedule({
       id="scheduler"
       className={`absolute lg:top-0 left-0 w-full bg-primary flex flex-col items-center rounded-b-xl shadow-xl z-50 ${
         isOpen
-          ? "h-[calc(100vh-20px)] lg:h-full -top-[165px]"
+          ? "h-[calc(100vh-40px)] lg:h-full -top-[165px]"
           : "h-[65px] -top-[128px]"
       }`}
     >
@@ -271,17 +273,17 @@ export default function Schedule({
         {isOpen && (
           <div
             id="filter-and-sort"
-            className={`relative w-full flex justify-between gap-3 text-secondary px-2`}
+            className={`relative w-full flex justify-between gap-2 text-secondary px-2 py-1 oveflow-hidden`}
           >
             <button
-              className="bg-tertiary p-3 rounded-lg"
+              className="rounded-lg"
               onClick={handleToggleSort}
               title="Filter and Sort"
             >
               {isSortOpen ? (
-                <MdOutlineFilterListOff size={20} />
+                <MdOutlineFilterListOff size={30} />
               ) : (
-                <MdOutlineFilterList size={20} />
+                <MdOutlineFilterList size={30} />
               )}
             </button>
             <AnimatePresence>
@@ -291,30 +293,36 @@ export default function Schedule({
                   animate={{ x: 0, opacity: 1 }}
                   exit={{ x: -50, opacity: 0 }}
                   transition={{ duration: 0.5, type: spring }}
-                  className="absolute w-[180px] md:w-auto left-[40px] top-2 flex gap-2 overflow-y-visible"
+                  className="absolute md:w-auto h-full left-[50px] top-0 flex items-center gap-1 bg-primary"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <div className="flex items-center gap-1">
-                    <span>Duration</span>
+                  <div className="flex items-center gap-1 bg-base/50 rounded-lg px-1">
+                    <span className="lg:hidden">
+                      <BsHourglassSplit size={20} />
+                    </span>
+                    <span className="hidden lg:block">Duration</span>
                     <section className="flex flex-col justify-center">
-                      <FaSortUp
+                      <TiArrowSortedUp
                         onClick={() => handleSortChange("duration", "asc")}
                         className="hover:bg-white/30"
                       />
-                      <FaSortDown
+                      <TiArrowSortedDown
                         onClick={() => handleSortChange("duration", "desc")}
                         className="hover:bg-white/30"
                       />
                     </section>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <span>Date</span>
+                  <div className="flex items-center gap-1 bg-base/50 rounded-lg px-1">
+                    <span className="lg:hidden">
+                      <LuCalendarClock size={20} />
+                    </span>
+                    <span className="hidden lg:block">Date</span>
                     <section className="flex flex-col justify-center">
-                      <FaSortUp
+                      <TiArrowSortedUp
                         onClick={() => handleSortChange("date", "asc")}
                         className="hover:bg-white/30"
                       />
-                      <FaSortDown
+                      <TiArrowSortedDown
                         onClick={() => handleSortChange("date", "desc")}
                         className="hover:bg-white/30"
                       />
@@ -343,7 +351,7 @@ export default function Schedule({
             </AnimatePresence>
             <motion.button
               id="randomizer"
-              className={`bg-tertiary py-2 rounded-lg flex items-center p-2`}
+              className={`bg-tertiary rounded-lg flex items-center ${isSortOpen && "hidden lg:block"}`}
               onClick={randomizeScheduleList}
               whileHover={{ scale: 1.2 }}
               whileTap={{ scale: 0.9 }}
@@ -353,9 +361,7 @@ export default function Schedule({
           </div>
         )}
         {isOpen && (
-          <motion.div
-            className=" w-full h-[calc(100%-164px)] px-2 pb-2 "
-          >
+          <motion.div className=" w-full h-[calc(100%-164px)] px-2 pb-2 ">
             <TasksContainer tasks={scheduleList} />
           </motion.div>
         )}

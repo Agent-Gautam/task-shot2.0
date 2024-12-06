@@ -1,6 +1,6 @@
 import { Task } from "@/utils/types";
 import { ChangeEvent } from "react";
-import { BsHourglassSplit } from "react-icons/bs";
+import { BsHourglassSplit } from "../utils/reactIcons";
 
 
 const DurationPicker = ({ duration, setDuration }: {duration: Task['duration'], setDuration: Function}) => {

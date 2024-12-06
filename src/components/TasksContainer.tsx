@@ -6,6 +6,7 @@ import TaskShow from "./TaskShow";
 import SubTabs from "./SubTabs";
 import { AnimatePresence, motion } from "motion/react";
 import NoTask from "./NoTask";
+import {LuList, LuCalendarClock, LuCalendarOff} from "../utils/reactIcons"
 
 const TasksContainer = ({ tasks }: { tasks: Task[] }) => {
   const [subTab, setSubTab] = useState(0);
@@ -33,9 +34,9 @@ const TasksContainer = ({ tasks }: { tasks: Task[] }) => {
   );
 
   const subtabs = [
-    { id: 0, text: "All", tasks: allTasks },
-    { id: 1, text: "Timely", tasks: timelyTasks },
-    { id: 2, text: "Non-Timely", tasks: nonTimelyTasks },
+    { id: 0, text: "All", tasks: allTasks, icon: <LuList /> },
+    { id: 1, text: "Timely", tasks: timelyTasks, icon: <LuCalendarClock /> },
+    { id: 2, text: "Non-Timely", tasks: nonTimelyTasks,icon: <LuCalendarOff /> },
   ];
 
   return (

@@ -1,5 +1,5 @@
 import { Task } from "../utils/types";
-import { categoryOptions, priorityOptions } from "@/utils/SharedContent";
+import { categoryOptions } from "@/utils/SharedContent";
 import { useState } from "react";
 import { MdClose, SlOptions } from "../utils/reactIcons";
 import TaskMenu from "./TaskMenu";
@@ -16,6 +16,7 @@ const TaskShow = ({ task, ind, closed }: { task: Task, ind: number, closed?: boo
     month: "long",
     day: "numeric"
   }) : null;
+  const colorClasses = ["bg-blue-200", "bg-orange-300", "bg-red-400"];
   
   return (
     <motion.div
@@ -36,7 +37,7 @@ const TaskShow = ({ task, ind, closed }: { task: Task, ind: number, closed?: boo
           <div
             id="priority"
             className={`absolute top-0 left-2 rounded-full w-2 h-full ${
-              priorityOptions[task.priority].colorClass
+              colorClasses[task.priority]
             }`}
           />
           {categoryOptions[task.category]?.icon}
@@ -48,9 +49,8 @@ const TaskShow = ({ task, ind, closed }: { task: Task, ind: number, closed?: boo
         <>
           <div
             className={`absolute left-2 top-0 w-2 h-full ${
-              priorityOptions[task.priority].colorClass
+              colorClasses[task.priority]
             } rounded-full`}
-            title={`${priorityOptions[task.priority].text}-priority`}
           />
           <div id="upper-row" className="w-full flex flex-col">
             <p className="w-full text-wrap">{task.description}</p>

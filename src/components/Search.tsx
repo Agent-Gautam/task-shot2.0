@@ -108,7 +108,7 @@ export default function Search({ closeSearch }: { closeSearch: () => void }) {
       initial={{ opacity: 0}}
       animate={{ opacity: 1 }}
       exit={{opacity: 0}}
-      className="absolute top-0 left-0 w-full backdrop-blur-xl h-full px-3 py-1 rounded-xl flex flex-col items-center z-50"
+      className="absolute top-0 left-0 w-full backdrop-blur-xl h-screen px-3 py-1 rounded-xl flex flex-col items-center z-50"
       onClick={() => closeSearch()}
     >
       <button className="place-self-start" onClick={closeSearch}>
