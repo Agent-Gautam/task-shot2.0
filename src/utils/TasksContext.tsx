@@ -30,6 +30,11 @@ export const TasksProvider: FC<{ userId: string; children: ReactNode }> = ({
 }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
 
+  //get user from the localstorage
+  useEffect(() => {
+    
+  }, [])
+
   const fetchTasks = async () => {
     try {
       const fetchedTasks = await FetchTasks(userId);

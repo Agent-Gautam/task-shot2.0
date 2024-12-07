@@ -56,9 +56,9 @@ const TasksContainer = ({ tasks }: { tasks: Task[] }) => {
         className="w-full hidden lg:block columns-[300px] p-6 space-y-3 overflow-auto"
       >
         <AnimatePresence>
-          {subtabs[subTab].tasks?.map((task, id) => (
+          {subtabs[subTab].tasks.length > 0 ? (subtabs[subTab].tasks.map((task, id) => (
             <TaskShow key={task.id} task={task} ind={id} />
-          ))}
+          ))): <NoTask />}
         </AnimatePresence>
       </div>
       <div id="mobile" className="flex-1 overflow-auto lg:hidden">

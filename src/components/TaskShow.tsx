@@ -25,7 +25,7 @@ const TaskShow = ({ task, ind, closed }: { task: Task, ind: number, closed?: boo
       animate={{
         opacity: 1,
         x: 0,
-        transition: { type: "spring", delay: ind * 0.1 },
+        transition: { type: "spring", delay: ind * 0.04 },
       }}
       exit={{ opacity: 0, scale: 0.5 }}
       className={`break-inside-avoid relative w-full h-auto rounded-md p-3 pl-6 py-2 flex gap-3  max-w-[500px] bg-white/30 backdrop-blur-lg ${

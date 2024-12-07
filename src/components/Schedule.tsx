@@ -209,7 +209,7 @@ export default function Schedule({
     <>
       <motion.div
         exit={{ scale: 0, opacity: 0 }}
-        className="bg-white/40 px-4 py-3 w-60 rounded-xl"
+        className="bg-white/40 px-4 py-3 w-60 rounded-xl z-50"
       >
         <DurationPicker
           duration={inputDuration}
@@ -270,7 +270,7 @@ export default function Schedule({
     >
       <div className="relative w-full h-full">
         {upperWindow}
-        {isOpen && (
+        {isOpen && !isAnimating && (
           <div
             id="filter-and-sort"
             className={`relative w-full flex justify-between gap-2 text-secondary px-2 py-1 oveflow-hidden`}
@@ -367,7 +367,7 @@ export default function Schedule({
         )}
         {!isAnimating && (
           <button
-            className="absolute -bottom-3 left-[50%] -translate-x-[50%] px-4 bg-primary rounded-b-full"
+            className="absolute -bottom-3 left-[50%] -translate-x-[50%] px-4 pt-2 bg-primary rounded-b-full z-40"
             onClick={() => {
               setSortOpen(false);
               setOpen(!isOpen);

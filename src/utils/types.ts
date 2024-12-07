@@ -48,4 +48,12 @@ export interface Task {
   isScheduled: boolean;
 }
 
+export interface User {
+  uid: string;
+  name: string;
+  email: string;
+  photoURL: string;
+  createdAt: string;
+}
+
 export type newTask = Omit<Task,'id'>

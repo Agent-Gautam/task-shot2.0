@@ -91,7 +91,6 @@ useEffect(() => {
       [name]: value,
     }));
   };
-  console.log(taskState.isTimeSpecific)
 
   // Handle form submission
   const handleSubmit = async (e: FormEvent) => {

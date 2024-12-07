@@ -21,7 +21,7 @@ import { base, tasksCol } from "./firebase.ts";
 //check validation in frontend
 async function CreateTask(task: newTask) {
   try {
-    const newTaskRef = await addDoc(tasksCol, task);
+    const newTaskRef = await addDoc(tasksCol, task,);
     console.log("Task created successfully");
     return newTaskRef.id;
   } catch (error) {

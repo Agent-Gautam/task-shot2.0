@@ -7,6 +7,7 @@ import {
   FaChevronDown,
   FaChevronUp,
   FaRandom,
+  FaGoogle
 } from "react-icons/fa";
 import {
   LuRepeat,
@@ -70,4 +71,5 @@ export {
   MdOutlineDoneOutline,
   MdOutlineFilterListOff,
   TbTargetArrow,
+  FaGoogle
 };
