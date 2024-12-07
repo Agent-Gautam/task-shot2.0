@@ -360,15 +360,18 @@ export default function Schedule({
             </motion.button>
           </div>
         )}
-        {isOpen && (
+        {isOpen && !isAnimating && (
           <motion.div className=" w-full h-[calc(100%-164px)] px-2 pb-2 ">
             <TasksContainer tasks={scheduleList} />
           </motion.div>
         )}
         {!isAnimating && (
           <button
-            className="absolute -bottom-3 left-[50%] -translate-x-[50%] px-2 bg-primary rounded-b-full"
-            onClick={() => setOpen(!isOpen)}
+            className="absolute -bottom-3 left-[50%] -translate-x-[50%] px-4 bg-primary rounded-b-full"
+            onClick={() => {
+              setSortOpen(false);
+              setOpen(!isOpen);
+            }}
           >
             {isOpen ? <FaChevronUp /> : <FaChevronDown />}
           </button>

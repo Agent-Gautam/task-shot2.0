@@ -33,9 +33,6 @@ export default function Select({
           onClick={() => setOpen(!open)}
         >
           <span className="scale-125">{options[selectedItem]?.icon}</span>
-          <span className="hidden md:block">
-            {selectedItem == -1 ? title : options[selectedItem].text}
-          </span>
           {selectedItem == -1 ? (
             <span>{title}</span>
           ) : (

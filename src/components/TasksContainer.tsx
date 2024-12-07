@@ -4,7 +4,7 @@ import "keen-slider/keen-slider.min.css";
 import { useKeenSlider } from "keen-slider/react";
 import TaskShow from "./TaskShow";
 import SubTabs from "./SubTabs";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence } from "motion/react";
 import NoTask from "./NoTask";
 import {LuList, LuCalendarClock, LuCalendarOff} from "../utils/reactIcons"
 
@@ -64,9 +64,7 @@ const TasksContainer = ({ tasks }: { tasks: Task[] }) => {
       <div id="mobile" className="flex-1 overflow-auto lg:hidden">
         <div ref={sliderRef} className="keen-slider">
           {subtabs.map((subtab, idx) => (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1, transition: { staggerChildren: 0.9 } }}
+            <div
               key={idx}
               className="keen-slider__slide h-full flex flex-col items-center gap-3 p-6"
             >
@@ -79,7 +77,7 @@ const TasksContainer = ({ tasks }: { tasks: Task[] }) => {
                   <NoTask />
                 )}
               </AnimatePresence>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
