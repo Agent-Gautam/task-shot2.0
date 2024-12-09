@@ -10,11 +10,9 @@ import Login from "./components/Login";
 import { auth } from "./utils/firebase";
 import {
   browserLocalPersistence,
-  getRedirectResult,
   onAuthStateChanged,
   setPersistence,
 } from "firebase/auth";
-import Profile from "./components/Profile";
 
 const App: React.FC = () => {
   const [tab, setTab] = useState(0);
@@ -62,7 +60,7 @@ const App: React.FC = () => {
             <Schedule isOpen={scheduleOpen} setOpen={setScheduleOpen} />
             <AllTasks tab={tab} />
           </div>
-          <Profile user={userId} />
+          {/* <Profile user={userId} /> */}
           <AnimatePresence>
             {createOpen && (
               <TaskMaker setOpen={() => setCreateOpen(false)} userId={userId} />

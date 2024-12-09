@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { auth, base, usersCol } from "../utils/firebase";
+import { auth, base} from "../utils/firebase";
 import { signOut } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 

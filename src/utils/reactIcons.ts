@@ -36,6 +36,7 @@ import { SlOptions } from "react-icons/sl";
 import { PiEmptyBold } from "react-icons/pi";
 import { TiTick, TiArrowSortedUp, TiArrowSortedDown } from "react-icons/ti";
 import { BsHourglassSplit } from "react-icons/bs";
+import { LiaSignOutAltSolid } from "react-icons/lia";
 
 export {
   BsHourglassSplit,
@@ -71,5 +72,6 @@ export {
   MdOutlineDoneOutline,
   MdOutlineFilterListOff,
   TbTargetArrow,
-  FaGoogle
+  FaGoogle,
+  LiaSignOutAltSolid,
 };
