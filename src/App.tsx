@@ -8,7 +8,13 @@ import Schedule from "./components/Schedule";
 import { AnimatePresence } from "motion/react";
 import Login from "./components/Login";
 import { auth } from "./utils/firebase";
-import { browserLocalPersistence, onAuthStateChanged, setPersistence } from "firebase/auth";
+import {
+  browserLocalPersistence,
+  getRedirectResult,
+  onAuthStateChanged,
+  setPersistence,
+} from "firebase/auth";
+import Profile from "./components/Profile";
 
 const App: React.FC = () => {
   const [tab, setTab] = useState(0);
@@ -17,30 +23,31 @@ const App: React.FC = () => {
   const [scheduleOpen, setScheduleOpen] = useState(false);
   const [userId, setUserId] = useState<string>("");
 
-useEffect(() => {
-  // Enable browserLocalPersistence globally
-  setPersistence(auth, browserLocalPersistence).catch((error) =>
-    console.error("Error enabling persistence:", error)
-  );
+  useEffect(() => {
+    // Enable browserLocalPersistence globally
+    setPersistence(auth, browserLocalPersistence).catch((error) =>
+      console.error("Error enabling persistence:", error)
+    );
 
-  // Listen for authentication state changes
-  const unsubscribe = onAuthStateChanged(auth, (user) => {
-    if (user) {
-      setUserId(user.uid); // Set the user ID if logged in
-    } else {
-      setUserId(""); // Clear user ID if logged out
-    }
-  });
+    // Listen for authentication state changes
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserId(user.uid); // Set the user ID if logged in
+        console.log(userId);
+      } else {
+        setUserId(""); // Clear user ID if logged out
+      }
+    });
 
-  return () => unsubscribe(); // Clean up listener on unmount
-}, []);
+    return () => unsubscribe(); // Clean up listener on unmount
+  }, []);
 
   return (
     <div
       className={`flex flex-col lg:flex-row w-full h-screen light lg:gap-5 lg:p-5 bg-base200`}
     >
       {!userId ? (
-        <Login setUserId={setUserId} />
+        <Login />
       ) : (
         <TasksProvider userId={userId}>
           <Header
@@ -55,13 +62,10 @@ useEffect(() => {
             <Schedule isOpen={scheduleOpen} setOpen={setScheduleOpen} />
             <AllTasks tab={tab} />
           </div>
-          <div className=""></div>
+          <Profile user={userId} />
           <AnimatePresence>
             {createOpen && (
-              <TaskMaker
-                setOpen={() => setCreateOpen(false)}
-                userId={userId}
-              />
+              <TaskMaker setOpen={() => setCreateOpen(false)} userId={userId} />
             )}
           </AnimatePresence>
           <AnimatePresence>

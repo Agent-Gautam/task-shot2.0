@@ -1,26 +1,22 @@
-import { auth, base } from "@/utils/firebase";
+import { auth, base, provider } from "@/utils/firebase";
 import {
-  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   User,
+  signInWithPopup,
 } from "firebase/auth";
-import { GoogleAuthProvider } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { motion } from "motion/react";
 import { FaGoogle } from "../utils/reactIcons";
+import { useEffect } from "react";
 
-const Login = ({
-  setUserId,
-}: {
-  setUserId: React.Dispatch<React.SetStateAction<string>>;
-}) => {
+const Login = () => {
 
   const signInWithGoogle = async () => {
-    const provider = new GoogleAuthProvider();
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       if (user) {
-        setUserId(user.uid);
         createUserInFirestore(user);
       }
     } catch (error) {
@@ -29,7 +25,7 @@ const Login = ({
   };
 
   const createUserInFirestore = async (user: User) => {
-    const userRef = doc(base, "Users", user.uid);
+    const userRef = doc(base, "users", user.uid);
     try {
       await setDoc(
         userRef,
@@ -61,9 +57,10 @@ const Login = ({
         <section className="flex flex-col gap-5 pt-16">
           <h3 className="text-black/60 text-xl pl-3">Login / Signup</h3>
           <motion.button
+            id="desktop-login"
             initial={{ scale: 1 }}
             whileTap={{ scale: 0.9 }}
-            className="bg-secondary text-base rounded-full p-3 flex items-center gap-3 shadow-lg"
+            className="flex bg-secondary text-base rounded-full p-3 items-center gap-3 shadow-lg"
             onClick={signInWithGoogle}
           >
             <FaGoogle />
