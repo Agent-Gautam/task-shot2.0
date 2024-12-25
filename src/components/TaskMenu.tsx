@@ -1,14 +1,24 @@
-import { MdOutlineEdit, TbClockUp, TbClockDown, AiOutlineDelete } from "../utils/reactIcons";
+import {
+  MdOutlineEdit,
+  TbClockUp,
+  TbClockDown,
+  AiOutlineDelete,
+  MdDone,
+} from "../utils/reactIcons";
 import { useTasksContext } from "@/utils/TasksContext";
 
 const TaskMenu = ({
   taskId,
   isTaskInScheduleList,
+  completefunction,
   setEditOpen,
+  isCompleted,
 }: {
   taskId: string;
   isTaskInScheduleList: boolean;
+  completefunction: () => void;
   setEditOpen: () => void;
+  isCompleted: boolean;
 }) => {
   //edit
   //delete
@@ -21,8 +31,17 @@ const TaskMenu = ({
       fun: () => setEditOpen(),
     },
     {
+      name: "Complete",
+      icon: <MdDone size={20} />,
+      fun: completefunction,
+    },
+    {
       name: "Schedule",
-      icon: isTaskInScheduleList ? <TbClockDown /> : <TbClockUp size={20} />,
+      icon: isTaskInScheduleList ? (
+        <TbClockDown size={20} />
+      ) : (
+        <TbClockUp size={20} />
+      ),
       fun: () => {
         updateTask(taskId, { inScheduleList: !isTaskInScheduleList });
       },
@@ -37,11 +56,17 @@ const TaskMenu = ({
   ];
   return (
     <div className="flex gap-2">
-      {actions.map((action) => (
-        <button key={action.name} onClick={action.fun}>
-          {action.icon}
+      {isCompleted ? (
+        <button key={actions[3].name} onClick={actions[3].fun}>
+          {actions[3].icon}
         </button>
-      ))}
+      ) : (
+        actions.map((action) => (
+          <button key={action.name} onClick={action.fun}>
+            {action.icon}
+          </button>
+        ))
+      )}
     </div>
   );
 };

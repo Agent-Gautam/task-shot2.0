@@ -42,7 +42,7 @@ const App: React.FC = () => {
 
   return (
     <div
-      className={`flex flex-col lg:flex-row w-full h-screen light lg:gap-5 lg:p-5 bg-base200`}
+      className={`flex flex-col lg:flex-row w-full h-screen light lg:gap-5 lg:p-5 bg-base200 select-none`}
     >
       {!userId ? (
         <Login />

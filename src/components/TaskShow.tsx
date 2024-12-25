@@ -5,10 +5,12 @@ import { MdClose, SlOptions } from "../utils/reactIcons";
 import TaskMenu from "./TaskMenu";
 import TaskMaker from "./TaskMaker";
 import { motion } from "motion/react";
+import { useTasksContext } from "@/utils/TasksContext";
 
 const TaskShow = ({ task, ind, closed }: { task: Task, ind: number, closed?: boolean }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
+  const { updateTask } = useTasksContext();
   if (!task) console.error("task not recieved");
   //extracing date from task.datetime
   const date = task.datetime ? new Date(task.datetime).toLocaleString("en-US", {
@@ -17,6 +19,13 @@ const TaskShow = ({ task, ind, closed }: { task: Task, ind: number, closed?: boo
     day: "numeric"
   }) : null;
   const colorClasses = ["bg-blue-200", "bg-orange-300", "bg-red-400"];
+  const actionCompleteTask = () => {
+    updateTask(task.id, {
+      isScheduled: false,
+      type: 2,
+      inScheduleList: false,
+    });
+  }
   
   return (
     <motion.div
@@ -28,6 +37,7 @@ const TaskShow = ({ task, ind, closed }: { task: Task, ind: number, closed?: boo
         transition: { type: "spring", delay: ind * 0.04 },
       }}
       exit={{ opacity: 0, scale: 0.5 }}
+      onDoubleClick={() => console.log("hello")}
       className={`break-inside-avoid relative w-full h-auto rounded-md p-3 pl-6 py-2 flex gap-3  max-w-[500px] bg-white/30 backdrop-blur-lg ${
         closed ? "flex-row w-auto items-center" : "flex-col"
       }`}
@@ -72,11 +82,13 @@ const TaskShow = ({ task, ind, closed }: { task: Task, ind: number, closed?: boo
               </div>
             </div>
             <div className="flex gap-2">
-              {menuOpen && (
-                <TaskMenu
-                  taskId={task.id}
-                  isTaskInScheduleList={task.inScheduleList}
-                  setEditOpen={() => setEditOpen(true)}
+                {menuOpen && (
+                  <TaskMenu
+                    taskId={task.id}
+                    isTaskInScheduleList={task.inScheduleList}
+                    completefunction={actionCompleteTask}
+                    setEditOpen={() => setEditOpen(true)}
+                    isCompleted={task.type == 2}
                 />
               )}
               <button onClick={() => setMenuOpen(!menuOpen)}>

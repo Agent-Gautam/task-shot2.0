@@ -175,6 +175,7 @@ export default function Schedule({
         !isOpen ? "flex-row w-24 h-auto gap-2" : "flex-col h-[100px]"
       }`}
     >
+      {/* completed button */}
       <button
         onClick={() => {
           const scheduledTaskId = scheduledTask?.id;
@@ -191,6 +192,7 @@ export default function Schedule({
       >
         <MdDone />
       </button>
+      {/* dismiss button */}
       <button
         className="px-2 py-1 bg-accent text-white rounded-lg"
         onClick={() => {
