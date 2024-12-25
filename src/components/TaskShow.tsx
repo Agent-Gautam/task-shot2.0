@@ -3,13 +3,12 @@ import { categoryOptions } from "@/utils/SharedContent";
 import { useState } from "react";
 import { MdClose, SlOptions } from "../utils/reactIcons";
 import TaskMenu from "./TaskMenu";
-import TaskMaker from "./TaskMaker";
 import { motion } from "motion/react";
-import { useTasksContext } from "@/utils/TasksContext";
+import { useTasksContext } from "@/providers/TasksContext";
+import { useTaskMaker } from "@/providers/TaskEditorContext";
 
 const TaskShow = ({ task, ind, closed }: { task: Task, ind: number, closed?: boolean }) => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [editOpen, setEditOpen] = useState(false);
   const { updateTask } = useTasksContext();
   if (!task) console.error("task not recieved");
   //extracing date from task.datetime
@@ -19,6 +18,7 @@ const TaskShow = ({ task, ind, closed }: { task: Task, ind: number, closed?: boo
     day: "numeric"
   }) : null;
   const colorClasses = ["bg-blue-200", "bg-orange-300", "bg-red-400"];
+  const {openTaskMaker} = useTaskMaker()
   const actionCompleteTask = () => {
     updateTask(task.id, {
       isScheduled: false,
@@ -87,7 +87,7 @@ const TaskShow = ({ task, ind, closed }: { task: Task, ind: number, closed?: boo
                     taskId={task.id}
                     isTaskInScheduleList={task.inScheduleList}
                     completefunction={actionCompleteTask}
-                    setEditOpen={() => setEditOpen(true)}
+                    setEditOpen={() => openTaskMaker(task, 'update')}
                     isCompleted={task.type == 2}
                 />
               )}
@@ -96,13 +96,6 @@ const TaskShow = ({ task, ind, closed }: { task: Task, ind: number, closed?: boo
               </button>
             </div>
           </div>
-          {editOpen && (
-            <TaskMaker
-              userId="user123"
-              setOpen={() => setEditOpen(false)}
-              taskInitials={task}
-            />
-          )}
         </>
       )}
     </motion.div>

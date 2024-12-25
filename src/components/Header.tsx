@@ -4,17 +4,17 @@ import { CgAddR } from "react-icons/cg";
 import { LiaSignOutAltSolid } from "../utils/reactIcons";
 import { signOut } from "firebase/auth";
 import { auth } from "@/utils/firebase";
+import { useTaskMaker } from "@/providers/TaskEditorContext";
 const Header = ({
   tab,
   setTab,
   toggleSearch,
-  toggleCreate,
 }: {
   tab: number;
   setTab: React.Dispatch<React.SetStateAction<number>>;
   toggleSearch: Function;
-  toggleCreate: Function;
   }) => {
+  const { openTaskMaker } = useTaskMaker();
     const handleSignOut = async () => {
     try {
       await signOut(auth);
@@ -52,7 +52,7 @@ const Header = ({
           </button>
           <button
             className="lg:w-full px-2 py-1 flex items-center gap-2 lg:text-2xl backdrop-blur-lg rounded-md lg:bg-white/30 text-secondary"
-            onClick={() => toggleCreate()}
+            onClick={() => openTaskMaker(null, 'create')}
           >
             <CgAddR size={30} className="text-secondary" />
             <p className="hidden lg:block">Add Task</p>

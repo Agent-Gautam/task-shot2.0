@@ -15,7 +15,7 @@ import {
 } from "../utils/reactIcons";
 import Select from "./Select";
 import DurationPicker from "./DurationPicker";
-import { useTasksContext } from "@/utils/TasksContext";
+import { useTasksContext } from "@/providers/TasksContext";
 import { scheduleTask } from "@/utils/scheduleFunctions";
 import TaskShow from "./TaskShow";
 import { categoryOptions, priorityOptions } from "@/utils/SharedContent";

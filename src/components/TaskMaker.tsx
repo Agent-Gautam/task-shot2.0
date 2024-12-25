@@ -7,18 +7,15 @@ import {
 } from "../utils/reactIcons";
 import DurationPicker from "./DurationPicker";
 import Select from "./Select";
-import { useTasksContext } from "@/utils/TasksContext";
+import { useTasksContext } from "@/providers/TasksContext";
 import { categoryOptions, priorityOptions } from "@/utils/SharedContent";
 import { AnimatePresence, motion } from "motion/react";
+import { useTaskMaker } from "@/providers/TaskEditorContext";
 
 function TaskMaker({
   userId,
-  setOpen,
-  taskInitials,
 }: {
   userId: Task["userId"];
-  setOpen: (isOpen: boolean) => void;
-  taskInitials?: Task;
 }){
   // Default task state for new tasks
   const defaultTaskState: newTask = {
@@ -34,6 +31,9 @@ function TaskMaker({
     datetime: "",
     isScheduled: false,
   };
+
+  const { isOpen, taskInitials, mode, closeTaskMaker } = useTaskMaker();
+  if (!isOpen) return null;
   
 
   const context = useTasksContext();
@@ -52,7 +52,8 @@ useEffect(() => {
     if (
       !taskState.description ||
       taskState.priority === -1 ||
-      taskState.category === -1
+      taskState.category === -1 ||
+      taskState == taskInitials
     ) {
       setDisabled(true);
     } else {
@@ -140,7 +141,7 @@ useEffect(() => {
       exit={{ opacity: 0 }}
       id="addtask"
       className="absolute top-0 left-0 w-full h-screen z-50 flex justify-center pt-24 bg-black/30"
-      onClick={() => setOpen(false)}
+      onClick={closeTaskMaker}
     >
       <div
         id="modal"
@@ -148,7 +149,7 @@ useEffect(() => {
         onClick={(event) => event.stopPropagation()}
       >
         <h1 className="w-full text-xl text-secondary text-center">
-          {taskInitials?.id ? "Update Task" : "Create a New Task"}
+          {mode == "update" ? "Update Task" : "Create a New Task"}
         </h1>
         <input
           type="text"
@@ -232,14 +233,14 @@ useEffect(() => {
         </div>
         <div className="w-full flex items-center gap-2">
           <button
-            onClick={() => setOpen(false)}
+            onClick={closeTaskMaker}
             className="bg-accent text-background w-[100px] h-[40px] rounded-xl disabled:bg-gray-300"
           >
             Close
           </button>
           <motion.button
             initial={{ scale: 1 }}
-            whileTap={{scale: !disabled ? 0.9 : 1}}
+            whileTap={{ scale: !disabled ? 0.9 : 1 }}
             type="submit"
             onClick={handleSubmit}
             disabled={disabled}

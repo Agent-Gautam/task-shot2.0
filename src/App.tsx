@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Header from "./components/Header";
-import { TasksProvider } from "./utils/TasksContext";
+import { TasksProvider } from "./providers/TasksContext";
 import TaskMaker from "./components/TaskMaker";
 import Search from "./components/Search";
 import AllTasks from "./components/AllTasks";
@@ -13,11 +13,11 @@ import {
   onAuthStateChanged,
   setPersistence,
 } from "firebase/auth";
+import { TaskMakerProvider } from "./providers/TaskEditorContext";
 
 const App: React.FC = () => {
   const [tab, setTab] = useState(0);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [createOpen, setCreateOpen] = useState(false);
   const [scheduleOpen, setScheduleOpen] = useState(false);
   const [userId, setUserId] = useState<string>("");
 
@@ -48,27 +48,28 @@ const App: React.FC = () => {
         <Login />
       ) : (
         <TasksProvider userId={userId}>
-          <Header
-            tab={tab}
-            setTab={setTab}
-            toggleSearch={() => setSearchOpen(true)}
-            toggleCreate={() => setCreateOpen(true)}
-          />
-          <div
-            className={`relative w-full lg:w-[60%] h-[calc(100%-170px)] lg:h-full flex flex-col lg:pt-[85px] pt-5 `}
-          >
-            <Schedule isOpen={scheduleOpen} setOpen={setScheduleOpen} />
-            <AllTasks tab={tab} />
-          </div>
-          {/* <Profile user={userId} /> */}
-          <AnimatePresence>
-            {createOpen && (
-              <TaskMaker setOpen={() => setCreateOpen(false)} userId={userId} />
-            )}
-          </AnimatePresence>
-          <AnimatePresence>
-            {searchOpen && <Search closeSearch={() => setSearchOpen(false)} />}
-          </AnimatePresence>
+          <TaskMakerProvider>
+            <Header
+              tab={tab}
+              setTab={setTab}
+              toggleSearch={() => setSearchOpen(true)}
+            />
+            <div
+              className={`relative w-full lg:w-[60%] h-[calc(100%-170px)] lg:h-full flex flex-col lg:pt-[85px] pt-5 `}
+            >
+              <Schedule isOpen={scheduleOpen} setOpen={setScheduleOpen} />
+              <AllTasks tab={tab} />
+            </div>
+            {/* <Profile user={userId} /> */}
+            <AnimatePresence>
+              <TaskMaker userId={userId} />
+            </AnimatePresence>
+            <AnimatePresence>
+              {searchOpen && (
+                <Search closeSearch={() => setSearchOpen(false)} />
+              )}
+            </AnimatePresence>
+          </TaskMakerProvider>
         </TasksProvider>
       )}
     </div>

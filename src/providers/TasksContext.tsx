@@ -6,13 +6,13 @@ import {
   ReactNode,
   FC,
 } from "react";
-import { newTask, Task } from "./types";
+import { newTask, Task } from "../utils/types";
 import {
   CreateTask,
   DeleteTask,
   EditTask,
   FetchTasks,
-} from "./firebaseFunctions";
+} from "../utils/firebaseFunctions";
 
 type TasksContextType = {
   tasks: Task[];

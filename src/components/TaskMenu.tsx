@@ -5,7 +5,7 @@ import {
   AiOutlineDelete,
   MdDone,
 } from "../utils/reactIcons";
-import { useTasksContext } from "@/utils/TasksContext";
+import { useTasksContext } from "@/providers/TasksContext";
 
 const TaskMenu = ({
   taskId,
