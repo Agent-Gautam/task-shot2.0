@@ -12,7 +12,6 @@ import LoadingTask from "./LoadingTask";
 
 const TasksContainer = ({ tasks }: { tasks: Task[] }) => {
   const [subTab, setSubTab] = useState(0);
-  const [loaded, setLoaded] = useState(false);
 
   const { loading } = useTasksContext();
 
@@ -22,7 +21,6 @@ const TasksContainer = ({ tasks }: { tasks: Task[] }) => {
       setSubTab(slider.track.details.rel);
     },
     created() {
-      setLoaded(true);
     },
   });
 

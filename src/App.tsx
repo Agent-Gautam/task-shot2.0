@@ -15,12 +15,6 @@ import {
 } from "firebase/auth";
 import { TaskMakerProvider } from "./providers/TaskEditorContext";
 
-const Loading: React.FC = () => (
-  <div className="flex items-center justify-center w-full h-screen bg-gray-200">
-    <h1 className="text-xl font-bold">Loading...</h1>
-  </div>
-);
-
 const App: React.FC = () => {
   const [tab, setTab] = useState(0);
   const [searchOpen, setSearchOpen] = useState(false);
