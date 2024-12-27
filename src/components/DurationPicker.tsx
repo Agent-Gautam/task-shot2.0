@@ -29,7 +29,7 @@ const DurationPicker = ({ duration, setDuration }: {duration: Task['duration'], 
             min={0}
             max={10}
             className="
-              w-10 h-6 text-xs
+              w-12 h-6 text-xs
              bg-slate-50 p-2 rounded-lg"
             value={duration.hour}
             onChange={handleChange}
@@ -45,7 +45,7 @@ const DurationPicker = ({ duration, setDuration }: {duration: Task['duration'], 
             title="minutes"
             min={1}
             max={59}
-            className="w-10 h-6 text-xs bg-slate-50 p-2 rounded-lg"
+            className="w-12 h-6 text-xs bg-slate-50 p-2 rounded-lg"
             value={duration.min}
             onChange={handleChange}
           />

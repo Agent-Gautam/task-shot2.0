@@ -43,7 +43,7 @@ export default function Schedule({
     [allTasks]
   );
 
-  const [scheduledTask, setScheduledTask] = useState<Task|null>();
+  const [scheduledTask, setScheduledTask] = useState<Task | null>();
   const [scheduleList, setScheduleList] = useState<Task[]>(tasksInScheduler);
 
   const [isSortOpen, setSortOpen] = useState(false);
@@ -139,19 +139,25 @@ export default function Schedule({
 
   // Handle scheduling a task
   function handleShot() {
-    let proposedTask: Task|null;
+    let proposedTask: Task | null;
     if (
       (inputDuration.min !== 0 || inputDuration.hour !== 0) &&
       allTasks.length > 0
     ) {
       proposedTask = scheduleTask(allTasks, inputDuration);
     } else if (scheduleList.length > 0) {
+      console.log(scheduleList[0]);
+
       proposedTask = scheduleList[0];
     } else {
       alert("No task to schedule");
       return;
     }
-    if ( proposedTask )updateTask(proposedTask.id, { isScheduled: true });
+    if (proposedTask)
+      updateTask(proposedTask.id, {
+        isScheduled: true,
+        scheduleTime: new Date().getTime(),
+      });
   }
 
   // Toggle sort and reset options
@@ -241,7 +247,9 @@ export default function Schedule({
       layout
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className={`w-full flex justify-center items-center gap-5 max-h-[120px] p-2 ${isAnimating && "text-transparent"} ${isOpen ? "h-[120px] pb-0" : "h-[65px]"}`}
+      className={`w-full flex justify-center items-center gap-5 max-h-[120px] p-2 ${
+        isAnimating && "text-transparent"
+      } ${isOpen ? "h-[120px] pb-0" : "h-[65px]"}`}
     >
       {scheduledTask ? (
         <>
@@ -353,7 +361,9 @@ export default function Schedule({
             </AnimatePresence>
             <motion.button
               id="randomizer"
-              className={`bg-tertiary rounded-lg flex items-center ${isSortOpen && "hidden lg:block"}`}
+              className={`bg-tertiary rounded-lg flex items-center ${
+                isSortOpen && "hidden lg:block"
+              }`}
               onClick={randomizeScheduleList}
               whileHover={{ scale: 1.2 }}
               whileTap={{ scale: 0.9 }}

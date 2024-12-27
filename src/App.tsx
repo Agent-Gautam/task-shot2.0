@@ -15,29 +15,43 @@ import {
 } from "firebase/auth";
 import { TaskMakerProvider } from "./providers/TaskEditorContext";
 
+const Loading: React.FC = () => (
+  <div className="flex items-center justify-center w-full h-screen bg-gray-200">
+    <h1 className="text-xl font-bold">Loading...</h1>
+  </div>
+);
+
 const App: React.FC = () => {
   const [tab, setTab] = useState(0);
   const [searchOpen, setSearchOpen] = useState(false);
   const [scheduleOpen, setScheduleOpen] = useState(false);
   const [userId, setUserId] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(true); // Track loading state
 
   useEffect(() => {
-    // Enable browserLocalPersistence globally
-    setPersistence(auth, browserLocalPersistence).catch((error) =>
-      console.error("Error enabling persistence:", error)
-    );
+    const initializeAuth = async () => {
+      try {
+        // Enable browserLocalPersistence globally
+        await setPersistence(auth, browserLocalPersistence);
 
-    // Listen for authentication state changes
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUserId(user.uid); // Set the user ID if logged in
-        console.log(userId);
-      } else {
-        setUserId(""); // Clear user ID if logged out
+        // Listen for authentication state changes
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+          if (user) {
+            setUserId(user.uid); // Set the user ID if logged in
+          } else {
+            setUserId(""); // Clear user ID if logged out
+          }
+          setIsLoading(false); // Mark as no longer loading
+        });
+
+        return () => unsubscribe(); // Clean up listener on unmount
+      } catch (error) {
+        console.error("Error initializing authentication:", error);
+        setIsLoading(false); // Ensure loading ends even on error
       }
-    });
+    };
 
-    return () => unsubscribe(); // Clean up listener on unmount
+    initializeAuth();
   }, []);
 
   return (
@@ -45,7 +59,7 @@ const App: React.FC = () => {
       className={`flex flex-col lg:flex-row w-full h-screen light lg:gap-5 lg:p-5 bg-base200 select-none`}
     >
       {!userId ? (
-        <Login />
+        <Login isLoading={isLoading} />
       ) : (
         <TasksProvider userId={userId}>
           <TaskMakerProvider>
@@ -55,12 +69,12 @@ const App: React.FC = () => {
               toggleSearch={() => setSearchOpen(true)}
             />
             <div
-              className={`relative w-full lg:w-[60%] h-[calc(100%-170px)] lg:h-full flex flex-col lg:pt-[85px] pt-5 `}
+              id="main-content"
+              className={`relative w-full lg:w-[60%] h-[calc(100%-170px)] lg:h-full flex flex-col lg:pt-[85px] pt-5`}
             >
               <Schedule isOpen={scheduleOpen} setOpen={setScheduleOpen} />
               <AllTasks tab={tab} />
             </div>
-            {/* <Profile user={userId} /> */}
             <AnimatePresence>
               <TaskMaker userId={userId} />
             </AnimatePresence>

@@ -29,7 +29,7 @@ function TaskMaker({
     duration: { hour: 0, min: 1 },
     isTimeSpecific: false,
     datetime: "",
-    isScheduled: false,
+    isScheduled: false, 
   };
 
   const { isOpen, taskInitials, mode, closeTaskMaker } = useTaskMaker();

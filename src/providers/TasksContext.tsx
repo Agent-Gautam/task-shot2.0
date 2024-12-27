@@ -13,9 +13,11 @@ import {
   EditTask,
   FetchTasks,
 } from "../utils/firebaseFunctions";
+import { isTaskExpired } from "@/utils/scheduleFunctions";
 
 type TasksContextType = {
   tasks: Task[];
+  loading: boolean; // New loading state
   fetchTasks: () => Promise<void>;
   createTask: (newTask: newTask) => Promise<boolean>;
   updateTask: (taskId: string, updatedTask: Partial<Task>) => Promise<boolean>;
@@ -29,18 +31,18 @@ export const TasksProvider: FC<{ userId: string; children: ReactNode }> = ({
   children,
 }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [loading, setLoading] = useState<boolean>(false); // Loading state
 
-  //get user from the localstorage
-  useEffect(() => {
-    
-  }, [])
-
+  // Fetch tasks with loading state
   const fetchTasks = async () => {
+    setLoading(true); // Set loading to true before fetching
     try {
       const fetchedTasks = await FetchTasks(userId);
       setTasks(fetchedTasks);
     } catch (error) {
       console.error("Error fetching tasks:", error);
+    } finally {
+      setLoading(false); // Set loading to false after fetching
     }
   };
 
@@ -48,7 +50,7 @@ export const TasksProvider: FC<{ userId: string; children: ReactNode }> = ({
     try {
       const taskId = await CreateTask(newTask);
       if (taskId) {
-        const taskToAdd: Task = {id: taskId, ...newTask}
+        const taskToAdd: Task = { id: taskId, ...newTask };
         setTasks((prevTasks) => [taskToAdd, ...prevTasks]);
         return true;
       }
@@ -92,9 +94,26 @@ export const TasksProvider: FC<{ userId: string; children: ReactNode }> = ({
     if (userId) fetchTasks();
   }, [userId]);
 
+  // Check pending tasks every 10 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      tasks.forEach((task) => {
+        if (task.isScheduled && task.scheduleTime) {
+          isTaskExpired(task.scheduleTime, task.duration) &&
+            updateTask(task.id, {type: 1, isScheduled: false})
+        } else if (task.isTimeSpecific) {
+          new Date().getTime() - new Date(task.datetime).getTime() >= 3600000 &&
+            updateTask(task.id, { type: 1, isScheduled: false });
+        }
+      });
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, [tasks]);
+
   return (
     <TasksContext.Provider
-      value={{ tasks, fetchTasks, createTask, updateTask, deleteTask }}
+      value={{ tasks, loading, fetchTasks, createTask, updateTask, deleteTask }}
     >
       {children}
     </TasksContext.Provider>

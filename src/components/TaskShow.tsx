@@ -37,7 +37,7 @@ const TaskShow = ({ task, ind, closed }: { task: Task, ind: number, closed?: boo
         transition: { type: "spring", delay: ind * 0.04 },
       }}
       exit={{ opacity: 0, scale: 0.5 }}
-      onDoubleClick={() => console.log("hello")}
+      onDoubleClick={actionCompleteTask}
       className={`break-inside-avoid relative w-full h-auto rounded-md p-3 pl-6 py-2 flex gap-3  max-w-[500px] bg-white/30 backdrop-blur-lg ${
         closed ? "flex-row w-auto items-center" : "flex-col"
       }`}

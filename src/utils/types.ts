@@ -46,6 +46,7 @@ export interface Task {
   isTimeSpecific: boolean;
   inScheduleList: boolean;
   isScheduled: boolean;
+  scheduleTime?: number;
 }
 
 export interface User {

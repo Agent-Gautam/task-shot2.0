@@ -87,10 +87,10 @@ export function scheduleTask(
 // **7. Check if a task is expired:** Determine if the task's duration has passed since its scheduled time.
 export function isTaskExpired(
   scheduledTime: number,
-  duration: string
+  duration: Task['duration']
 ): boolean {
-  const [hours, minutes] = duration.split(":").map(Number);
-  const durationInMilliseconds = (hours * 60 + minutes) * 60 * 1000;
+  const {hour, min} = duration;
+  const durationInMilliseconds = (hour * 60 + min) * 60 * 1000;
 
   const taskEndTime = scheduledTime + durationInMilliseconds;
   const currentTime = Date.now();

@@ -55,14 +55,14 @@ const TaskMenu = ({
     },
   ];
   return (
-    <div className="flex gap-2">
+    <div className="flex">
       {isCompleted ? (
-        <button key={actions[3].name} onClick={actions[3].fun}>
+        <button key={actions[3].name} title="Delete" onClick={actions[3].fun}>
           {actions[3].icon}
         </button>
       ) : (
         actions.map((action) => (
-          <button key={action.name} onClick={action.fun}>
+          <button key={action.name} title={action.name} onClick={action.fun} className="hover:bg-black/10 rounded-full p-1">
             {action.icon}
           </button>
         ))
