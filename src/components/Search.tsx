@@ -111,7 +111,7 @@ export default function Search({ closeSearch }: { closeSearch: () => void }) {
       className="absolute top-0 left-0 w-full backdrop-blur-xl h-screen md:px-3 py-1 rounded-xl flex flex-col items-center z-50"
       onClick={() => closeSearch()}
     >
-      <button className="place-self-start" onClick={closeSearch}>
+      <button className="place-self-start text-text" onClick={closeSearch}>
         <MdClose size={30} />
       </button>
       <div
@@ -127,7 +127,7 @@ export default function Search({ closeSearch }: { closeSearch: () => void }) {
             name="searchTerm"
             value={searchInputs.searchTerm}
             onChange={(e) => handleSearchInput("searchTerm", e.target.value)}
-            className="p-2 border rounded-lg w-full bg-gray-50"
+            className="p-2 border rounded-lg w-full bg-base text-text"
             placeholder=" Search tasks..."
           />
           <motion.button
@@ -143,9 +143,9 @@ export default function Search({ closeSearch }: { closeSearch: () => void }) {
 
         {/* Filter Menu */}
         {isFilterMenuVisible && (
-          <div className="p-4 bg-white rounded-lg shadow-md flex flex-col lg:flex-row flex-wrap gap-4">
+          <div className="p-4 bg-base text-text rounded-lg shadow-md flex flex-col lg:flex-row flex-wrap gap-4">
             {/* Search in Section */}
-            <p className="text-sm font-semibold text-gray-700">Search in:</p>
+            <p className="text-sm font-semibold text-text">Search in:</p>
             <div className="flex gap-2 items-center">
               <button
                 onClick={() =>

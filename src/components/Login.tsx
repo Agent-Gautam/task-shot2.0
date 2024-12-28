@@ -49,7 +49,7 @@ const Login = ({isLoading}: {isLoading: boolean}) => {
       className="absolute top-0 left-0 w-full h-screen flex justify-center items-center bg-base200"
     >
       <div className="w-[320px] md:w-[400px] h-[300px] text-text flex flex-col gap-5 p-5 rounded-xl bg-base shadow-xl">
-        <h1 className="text-center text-secondary font-semibold text-xl lg:text-4xl">
+        <h1 className="text-center text-text font-semibold text-xl lg:text-4xl">
           Task Scheduler
         </h1>
         {isLoading ? (

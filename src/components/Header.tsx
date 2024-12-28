@@ -9,13 +9,15 @@ const Header = ({
   tab,
   setTab,
   toggleSearch,
+  scheduleToggle,
 }: {
   tab: number;
   setTab: React.Dispatch<React.SetStateAction<number>>;
   toggleSearch: Function;
-  }) => {
+  scheduleToggle: Function;
+}) => {
   const { openTaskMaker } = useTaskMaker();
-    const handleSignOut = async () => {
+  const handleSignOut = async () => {
     try {
       await signOut(auth);
       console.log("User signed out successfully");
@@ -25,7 +27,7 @@ const Header = ({
   };
   const LogOutButton = (
     <button
-      className="lg:w-full backdrop-blur-md rounded-md px-2 py-1 flex items-center gap-2 lg:text-2xl lg:bg-white/30 text-secondary"
+      className="lg:w-full backdrop-blur-md rounded-md px-2 py-1 flex items-center gap-2 lg:text-2xl lg:bg-white/60 text-secondary"
       onClick={handleSignOut}
     >
       <LiaSignOutAltSolid size={30} />
@@ -44,15 +46,15 @@ const Header = ({
           className="flex lg:flex-col lg:w-full gap-2 lg:absolute  top-[110%]"
         >
           <button
-            className="lg:w-full backdrop-blur-md rounded-md px-2 py-1 flex items-center gap-2 lg:text-2xl lg:bg-white/30 text-secondary"
+            className="lg:w-full backdrop-blur-md rounded-md px-2 py-1 flex items-center gap-2 lg:text-2xl lg:bg-white/60 text-secondary"
             onClick={() => toggleSearch()}
           >
             <BsSearch size={30} className="" />
             <p className="hidden lg:block">Search</p>
           </button>
           <button
-            className="lg:w-full px-2 py-1 flex items-center gap-2 lg:text-2xl backdrop-blur-lg rounded-md lg:bg-white/30 text-secondary"
-            onClick={() => openTaskMaker(null, 'create')}
+            className="lg:w-full px-2 py-1 flex items-center gap-2 lg:text-2xl backdrop-blur-lg rounded-md lg:bg-white/60 text-secondary"
+            onClick={() => openTaskMaker(null, "create")}
           >
             <CgAddR size={30} className="text-secondary" />
             <p className="hidden lg:block">Add Task</p>
@@ -60,7 +62,10 @@ const Header = ({
           <div className="lg:hidden">{LogOutButton}</div>
         </section>
       </header>
-      <Navigation setTab={setTab} tab={tab} />
+      <Navigation setTab={(id) => {
+        setTab(id);
+        scheduleToggle();
+      }} tab={tab} />
       <div className="hidden absolute bottom-0 lg:block w-full self-end">
         {LogOutButton}
       </div>

@@ -21,22 +21,28 @@ const Navigation = ({
             layout
             key={obj.id}
             className={`w-[20%] lg:w-full p-1 lg:h-[50px] text-sm rounded-lg ${
-              tab === obj.id ? "bg-secondary text-base flex-1 lg:flex-none" : "lg:bg-neutral shadow-inner"
+              tab === obj.id
+                ? "bg-secondary flex-1 lg:flex-none"
+                : "lg:bg-neutral shadow-inner"
             }`}
           >
             <button
               className="w-full h-full flex items-center px-3 py-1 lg:py-0 backdrop-blur-lg"
-              onClick={() => setTab(obj.id)}
+              onClick={() => {
+                setTab(obj.id);
+              }}
               title={obj.text}
             >
               <span
-                className={`${tab == obj.id ? "text-base" : "text-accent"}`}
+                className={`${tab == obj.id ? "text-text" : "text-accent"}`}
               >
                 {obj.icon}
               </span>
               <span
                 className={` ${
-                  tab == obj.id ? "block text-base" : "hidden lg:block text-accent lg:text-black"
+                  tab == obj.id
+                    ? "block text-text"
+                    : "hidden lg:block text-accent lg:text-black"
                 } ml-2 `}
               >
                 {obj.text}

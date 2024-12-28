@@ -47,7 +47,7 @@ const TasksContainer = ({ tasks }: { tasks: Task[] }) => {
   ];
 
   return (
-    <div className="w-full h-full flex flex-col flex-1 bg-base text-text">
+    <div className="w-full h-full flex flex-col flex-1 bg-base text-text rounded-t-2xl">
       {/* Subtab Navigation */}
       {!loading  && (
         <SubTabs
@@ -59,7 +59,7 @@ const TasksContainer = ({ tasks }: { tasks: Task[] }) => {
 
       {loading ? (
         <div className="columns-[300px] space-y-3 p-6">
-          {Array.from({ length: 5 }).map(() => (
+          {Array.from({ length: 4 }).map(() => (
             <LoadingTask />
           ))}
         </div>

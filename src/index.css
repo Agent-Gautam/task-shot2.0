@@ -2,23 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
+.root {
+
+}
+
 .light {
   /* Light mode */
-  --primary: 249 204 72;
-  --secondary: 47 69 93;
-  --accent: 242 169 34;
-  --base: 239 237 244;
-  --base200: 243 232 190;
-  --neutral: 233 236 241;
+  --primary: 249 204 72; /* Warm golden yellow */
+  --secondary: 47 69 93; /* Muted blue-gray */
+  --accent: 242 169 34; /* Bright orange */
+  --base: 239 237 244; /* Light gray background */
+  --base200: 243 232 190; /* Soft beige */
+  --neutral: 233 236 241; /* Cool neutral gray */
+  --text: 0 0 0;
 }
 
 .dark {
   /* Dark mode */
-  --primary: 249 204 72;
-  --secondary: 47 69 93;
-  --accent: 248 219 138;
-  --base: 20 26 38;
-  --base200: 29 40 58;
-  --neutral: 125 113 78;
-  --text: 253 252 248;
+  --primary: 210 174 56; /* Softer golden yellow */
+  --secondary: 39 59 78; /* Muted teal-gray */
+  --accent: 215 148 42; /* Rich warm orange */
+  --base: 29 40 58; /* Darker near-black background */
+  --base200: 20 26 38; /* Muted dark blue-gray */
+  --neutral: 150 143 130; /* Neutral warm gray for balance */
+  --text: 235 233 230; /* Off-white text for better readability */
 }

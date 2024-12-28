@@ -26,7 +26,7 @@ export default function Select({
       role="select"
       className={`relative rounded-lg cursor-pointer`}
     >
-      <div className=" w-full text-secondary flex gap-1 divide-x rounded-full py-1 px-1 md:px-2 bg-base/50">
+      <div className=" w-full flex gap-1 divide-x rounded-full py-1 px-1 md:px-2 bg-white/50">
         <button
           className="rounded-l-full flex items-center gap-2"
           id="selected"

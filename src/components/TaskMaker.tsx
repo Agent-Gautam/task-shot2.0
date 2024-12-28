@@ -140,12 +140,12 @@ useEffect(() => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       id="addtask"
-      className="absolute top-0 left-0 w-full h-screen z-50 flex justify-center pt-24 bg-black/30"
+      className="absolute top-0 left-0 w-full h-screen z-50 flex justify-center pt-24 bg-black/50 backdrop-blur-sm" 
       onClick={closeTaskMaker}
     >
       <div
         id="modal"
-        className="w-[320px] md:w-[400px] h-[350px] text-text border-2 shadow-md flex flex-col gap-5 p-5 rounded-xl z-50 overflow-hidden bg-white"
+        className="w-[320px] md:w-[400px] h-[350px] text-text border-2 shadow-md flex flex-col gap-5 p-5 rounded-xl z-50 overflow-hidden bg-base200"
         onClick={(event) => event.stopPropagation()}
       >
         <h1 className="w-full text-xl text-secondary text-center">
@@ -158,7 +158,7 @@ useEffect(() => {
           onChange={handleChange}
           id="desc"
           placeholder="Task Description"
-          className={`z-50 w-full h-10 pl-5 border-b-2 outline-none ${
+          className={`z-50 w-full h-10 pl-5 border-b-2 outline-none bg-transparent ${
             taskState.description && "border-secondary"
           }`}
           title="Description"
@@ -223,7 +223,7 @@ useEffect(() => {
                 type="datetime-local"
                 name="datetime"
                 id="datetime"
-                className="bg-inherit w-[190px] outline-none focus:border-2 border-secondary rounded-lg"
+                className="bg-base200 w-[190px] outline-none focus:border-2 border-secondary rounded-lg"
                 value={taskState.datetime}
                 onChange={handleChange}
                 required={taskState.isTimeSpecific}
@@ -244,7 +244,7 @@ useEffect(() => {
             type="submit"
             onClick={handleSubmit}
             disabled={disabled}
-            className="bg-secondary text-base flex-1 h-[40px] rounded-xl disabled:bg-gray-300"
+            className="bg-secondary text-text flex-1 h-[40px] rounded-xl disabled:bg-gray-300"
           >
             Save
           </motion.button>

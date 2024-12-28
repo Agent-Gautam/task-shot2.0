@@ -64,12 +64,12 @@ const TaskShow = ({ task, ind, closed }: { task: Task, ind: number, closed?: boo
           />
           <div id="upper-row" className="w-full flex flex-col">
             <p className="w-full text-wrap">{task.description}</p>
-            {date && <p className="text-black/50 text-sm">{date}</p>}
+            {date && <p className="text-text/50 text-sm">{date}</p>}
           </div>
           <div id="lower-row" className="flex justify-between items-center">
             <div id="left" className="flex gap-2 items-center">
               <h1>{categoryOptions[task.category].icon}</h1>
-              <div className="bg-base rounded-lg py-1 px-3 flex">
+              <div className="bg-white/50 text-black rounded-lg py-1 px-3 flex">
                 {task.duration.hour !== 0 && (
                   <h2 id="hour">{task.duration.hour}h</h2>
                 )}

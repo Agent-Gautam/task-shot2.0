@@ -194,7 +194,7 @@ export default function Schedule({
             setScheduledTask(null);
           }
         }}
-        className="rounded-lg bg-secondary text-base py-1 px-2"
+        className="rounded-lg bg-secondary text-white py-1 px-2"
       >
         <MdDone />
       </button>
@@ -306,7 +306,7 @@ export default function Schedule({
                   className="absolute md:w-auto h-full left-[50px] top-0 flex items-center gap-1 bg-primary"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <div className="flex items-center gap-1 bg-base/50 rounded-lg px-1">
+                  <div className="flex items-center gap-1 bg-white/50 rounded-lg px-1">
                     <span className="lg:hidden">
                       <BsHourglassSplit size={20} />
                     </span>
@@ -322,7 +322,7 @@ export default function Schedule({
                       />
                     </section>
                   </div>
-                  <div className="flex items-center gap-1 bg-base/50 rounded-lg px-1">
+                  <div className="flex items-center gap-1 bg-white/50 rounded-lg px-1">
                     <span className="lg:hidden">
                       <LuCalendarClock size={20} />
                     </span>

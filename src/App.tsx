@@ -50,7 +50,7 @@ const App: React.FC = () => {
 
   return (
     <div
-      className={`flex flex-col lg:flex-row w-full h-screen light lg:gap-5 lg:p-5 bg-base200 select-none`}
+      className={`flex flex-col lg:flex-row w-full h-screen dark lg:gap-5 lg:p-5 bg-base200 select-none`}
     >
       {!userId ? (
         <Login isLoading={isLoading} />
@@ -60,7 +60,8 @@ const App: React.FC = () => {
             <Header
               tab={tab}
               setTab={setTab}
-              toggleSearch={() => setSearchOpen(true)}
+                toggleSearch={() => setSearchOpen(true)}
+                scheduleToggle={() => setScheduleOpen(false)}
             />
             <div
               id="main-content"
