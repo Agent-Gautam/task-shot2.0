@@ -14,15 +14,21 @@ import {
   setPersistence,
 } from "firebase/auth";
 import { TaskMakerProvider } from "./providers/TaskEditorContext";
+import Profile from "./components/Profile";
 
 const App: React.FC = () => {
   const [tab, setTab] = useState(0);
   const [searchOpen, setSearchOpen] = useState(false);
   const [scheduleOpen, setScheduleOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
   const [userId, setUserId] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true); // Track loading state
+  const [theme, setTheme] = useState("light");
 
   useEffect(() => {
+    const fetchedTheme = localStorage.getItem("theme") || "light";
+    console.log(fetchedTheme);
+    setTheme(fetchedTheme);
     const initializeAuth = async () => {
       try {
         // Enable browserLocalPersistence globally
@@ -50,7 +56,9 @@ const App: React.FC = () => {
 
   return (
     <div
-      className={`flex flex-col lg:flex-row w-full h-screen dark lg:gap-5 lg:p-5 bg-base200 select-none`}
+      className={`flex flex-col lg:flex-row w-full h-screen ${
+        theme
+      } lg:gap-5 lg:p-5 bg-base200 select-none`}
     >
       {!userId ? (
         <Login isLoading={isLoading} />
@@ -60,8 +68,9 @@ const App: React.FC = () => {
             <Header
               tab={tab}
               setTab={setTab}
-                toggleSearch={() => setSearchOpen(true)}
-                scheduleToggle={() => setScheduleOpen(false)}
+              toggleSearch={() => setSearchOpen(true)}
+              scheduleToggle={() => setScheduleOpen(false)}
+              profileToggle={() => setProfileOpen(true)}
             />
             <div
               id="main-content"
@@ -70,6 +79,13 @@ const App: React.FC = () => {
               <Schedule isOpen={scheduleOpen} setOpen={setScheduleOpen} />
               <AllTasks tab={tab} />
             </div>
+            <Profile
+              user={userId}
+              openState={profileOpen}
+              toggleProfile={() => setProfileOpen(false)}
+              theme={theme}
+              setTheme={setTheme}
+            />
             <AnimatePresence>
               <TaskMaker userId={userId} />
             </AnimatePresence>

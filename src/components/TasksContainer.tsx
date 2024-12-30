@@ -59,8 +59,8 @@ const TasksContainer = ({ tasks }: { tasks: Task[] }) => {
 
       {loading ? (
         <div className="columns-[300px] space-y-3 p-6">
-          {Array.from({ length: 4 }).map(() => (
-            <LoadingTask />
+          {Array.from({ length: 4 }).map((_,id) => (
+            <LoadingTask key={id} />
           ))}
         </div>
       ) : (

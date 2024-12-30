@@ -34,14 +34,14 @@ const Navigation = ({
               title={obj.text}
             >
               <span
-                className={`${tab == obj.id ? "text-text" : "text-accent"}`}
+                className={`${tab == obj.id ? "text-white" : "text-accent"}`}
               >
                 {obj.icon}
               </span>
               <span
                 className={` ${
                   tab == obj.id
-                    ? "block text-text"
+                    ? "block text-white"
                     : "hidden lg:block text-accent lg:text-black"
                 } ml-2 `}
               >

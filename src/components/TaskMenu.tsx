@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   MdOutlineEdit,
   TbClockUp,
@@ -24,6 +25,7 @@ const TaskMenu = ({
   //delete
   //add to scheduler
   const { updateTask, deleteTask } = useTasksContext();
+  const [loading, setLoading] = useState(false);
   const actions = [
     {
       name: "Edit",
@@ -42,8 +44,10 @@ const TaskMenu = ({
       ) : (
         <TbClockUp size={20} />
       ),
-      fun: () => {
-        updateTask(taskId, { inScheduleList: !isTaskInScheduleList });
+      fun: async () => {
+        setLoading(true)
+        await updateTask(taskId, { inScheduleList: !isTaskInScheduleList });
+        setLoading(false);
       },
     },
     {
@@ -62,7 +66,12 @@ const TaskMenu = ({
         </button>
       ) : (
         actions.map((action) => (
-          <button key={action.name} title={action.name} onClick={action.fun} className="hover:bg-black/10 rounded-full p-1">
+          <button
+            key={action.name}
+            title={action.name}
+            onClick={action.fun}
+            className={`hover:bg-black/10 rounded-full p-1 ${loading && "animate-pulse"}`}
+          >
             {action.icon}
           </button>
         ))

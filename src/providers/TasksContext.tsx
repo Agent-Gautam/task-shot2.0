@@ -5,6 +5,7 @@ import {
   useContext,
   ReactNode,
   FC,
+  useMemo,
 } from "react";
 import { newTask, Task } from "../utils/types";
 import {
@@ -32,6 +33,8 @@ export const TasksProvider: FC<{ userId: string; children: ReactNode }> = ({
 }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState<boolean>(false); // Loading state
+
+  const notPendingTasks = useMemo(() => tasks.filter(task => task.type !== 1), tasks)
 
   // Fetch tasks with loading state
   const fetchTasks = async () => {
@@ -97,7 +100,7 @@ export const TasksProvider: FC<{ userId: string; children: ReactNode }> = ({
   // Check pending tasks every 10 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      tasks.forEach((task) => {
+      notPendingTasks.forEach((task) => {
         if (task.isScheduled && task.scheduleTime) {
           isTaskExpired(task.scheduleTime, task.duration) &&
             updateTask(task.id, {type: 1, isScheduled: false})

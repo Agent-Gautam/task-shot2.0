@@ -148,7 +148,7 @@ useEffect(() => {
         className="w-[320px] md:w-[400px] h-[350px] text-text border-2 shadow-md flex flex-col gap-5 p-5 rounded-xl z-50 overflow-hidden bg-base200"
         onClick={(event) => event.stopPropagation()}
       >
-        <h1 className="w-full text-xl text-secondary text-center">
+        <h1 className="w-full text-xl text-text text-center">
           {mode == "update" ? "Update Task" : "Create a New Task"}
         </h1>
         <input

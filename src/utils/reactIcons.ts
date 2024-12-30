@@ -7,7 +7,9 @@ import {
   FaChevronDown,
   FaChevronUp,
   FaRandom,
-  FaGoogle
+  FaGoogle,
+  FaUserCircle,
+  FaMoon
 } from "react-icons/fa";
 import {
   LuRepeat,
@@ -30,13 +32,15 @@ import {
   MdOutlineDoneOutline,
   MdOutlineFilterList,
   MdOutlineFilterListOff,
+  MdWbSunny,
 } from "react-icons/md";
-import { AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineDelete, AiOutlineMenu } from "react-icons/ai";
 import { SlOptions } from "react-icons/sl";
 import { PiEmptyBold } from "react-icons/pi";
 import { TiTick, TiArrowSortedUp, TiArrowSortedDown } from "react-icons/ti";
 import { BsHourglassSplit } from "react-icons/bs";
 import { LiaSignOutAltSolid } from "react-icons/lia";
+import { IoMenu } from "react-icons/io5";
 
 export {
   BsHourglassSplit,
@@ -47,6 +51,7 @@ export {
   GiAutoRepair,
   FaCaretDown,
   FaHandHolding,
+  FaMoon,
   LuRepeat,
   LuMonitorPlay,
   LuList,
@@ -58,10 +63,12 @@ export {
   TbClockDown,
   MdOutlineEdit,
   AiOutlineDelete,
+  AiOutlineMenu,
   SlOptions,
   MdClose,
   PiEmptyBold,
   MdOutlineFilterList,
+  MdWbSunny,
   TiTick,
   TiArrowSortedUp,
   TiArrowSortedDown,
@@ -74,4 +81,5 @@ export {
   TbTargetArrow,
   FaGoogle,
   LiaSignOutAltSolid,
+  FaUserCircle,
 };

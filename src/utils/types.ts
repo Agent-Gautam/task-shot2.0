@@ -55,6 +55,7 @@ export interface User {
   email: string;
   photoURL: string;
   createdAt: string;
+  theme: string;
 }
 
 export type newTask = Omit<Task,'id'>

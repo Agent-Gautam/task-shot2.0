@@ -9,7 +9,8 @@ import {
   where,
 } from "firebase/firestore";
 import { newTask, Task } from "./types.ts";
-import { base, tasksCol } from "./firebase.ts";
+import { auth, base, tasksCol } from "./firebase.ts";
+import { signOut } from "firebase/auth";
 
 // async function createMany() {
 //   mocktasks.forEach(async (task: Task) => {
@@ -21,7 +22,7 @@ import { base, tasksCol } from "./firebase.ts";
 //check validation in frontend
 async function CreateTask(task: newTask) {
   try {
-    const newTaskRef = await addDoc(tasksCol, task,);
+    const newTaskRef = await addDoc(tasksCol, task);
     console.log("Task created successfully");
     return newTaskRef.id;
   } catch (error) {
@@ -44,7 +45,7 @@ async function EditTask(
   taskId: Task["id"],
   modifiedProperties: Partial<Task>
 ): Promise<boolean> {
-  console.log(taskId)
+  console.log(taskId);
   try {
     const taskRef = doc(base, "tasks", taskId);
     await updateDoc(taskRef, modifiedProperties);
@@ -114,6 +115,15 @@ async function FetchScheduled(userId: Task["userId"]): Promise<Task | null> {
   }
 }
 
+const handleSignOut = async () => {
+  try {
+    await signOut(auth);
+    console.log("User signed out successfully");
+  } catch (error) {
+    console.error("Error signing out:", error);
+  }
+};
+
 export {
   CreateTask,
   DeleteTask,
@@ -121,4 +131,5 @@ export {
   FetchTasks,
   FetchScheduleList,
   FetchScheduled,
+  handleSignOut
 };

@@ -35,7 +35,7 @@ const Login = ({isLoading}: {isLoading: boolean}) => {
         },
         { merge: true }
       );
-      console.log("User created/updated successfully!");
+      console.log("User created/updated successfully!",user);
     } catch (error) {
       console.error("Error creating/updating user:", error);
     }
@@ -56,12 +56,12 @@ const Login = ({isLoading}: {isLoading: boolean}) => {
           <LoadingAnimation />
         ) : (
           <section className="flex flex-col gap-5 h-52 justify-between items-center text-center">
-            <h3 className="text-black/60 text-2xl pl-3">Login / Signup</h3>
+            <h3 className="text-text text-2xl pl-3">Login / Signup</h3>
             <motion.button
               id="desktop-login"
               initial={{ scale: 1 }}
               whileTap={{ scale: 0.9 }}
-              className="flex bg-secondary text-base rounded-full p-3 items-center gap-3 shadow-lg divide-x-2"
+              className="flex bg-secondary text-white rounded-full p-3 items-center gap-3 shadow-lg divide-x-2"
               onClick={signInWithGoogle}
             >
               <FaGoogle />

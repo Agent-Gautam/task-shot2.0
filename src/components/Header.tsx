@@ -1,39 +1,22 @@
 import Navigation from "./Navigation";
 import { BsSearch } from "react-icons/bs";
 import { CgAddR } from "react-icons/cg";
-import { LiaSignOutAltSolid } from "../utils/reactIcons";
-import { signOut } from "firebase/auth";
-import { auth } from "@/utils/firebase";
+import { AiOutlineMenu } from "../utils/reactIcons";
 import { useTaskMaker } from "@/providers/TaskEditorContext";
 const Header = ({
   tab,
   setTab,
   toggleSearch,
   scheduleToggle,
+  profileToggle,
 }: {
   tab: number;
   setTab: React.Dispatch<React.SetStateAction<number>>;
   toggleSearch: Function;
   scheduleToggle: Function;
+  profileToggle: Function;
 }) => {
   const { openTaskMaker } = useTaskMaker();
-  const handleSignOut = async () => {
-    try {
-      await signOut(auth);
-      console.log("User signed out successfully");
-    } catch (error) {
-      console.error("Error signing out:", error);
-    }
-  };
-  const LogOutButton = (
-    <button
-      className="lg:w-full backdrop-blur-md rounded-md px-2 py-1 flex items-center gap-2 lg:text-2xl lg:bg-white/60 text-secondary"
-      onClick={handleSignOut}
-    >
-      <LiaSignOutAltSolid size={30} />
-      <p className="hidden lg:block">LogOut</p>
-    </button>
-  );
   return (
     <aside
       id="pane1"
@@ -59,18 +42,20 @@ const Header = ({
             <CgAddR size={30} className="text-secondary" />
             <p className="hidden lg:block">Add Task</p>
           </button>
-          <div className="lg:hidden">{LogOutButton}</div>
+          <button className="lg:hidden" onClick={() => profileToggle()}>
+            <AiOutlineMenu size={30} />
+          </button>
         </section>
       </header>
-      <Navigation setTab={(id) => {
-        setTab(id);
-        scheduleToggle();
-      }} tab={tab} />
-      <div className="hidden absolute bottom-0 lg:block w-full self-end">
-        {LogOutButton}
-      </div>
+      <Navigation
+        setTab={(id) => {
+          setTab(id);
+          scheduleToggle();
+        }}
+        tab={tab}
+      />
     </aside>
   );
 };
 
-export default Header
+export default Header;
