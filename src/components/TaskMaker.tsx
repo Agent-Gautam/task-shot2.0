@@ -1,10 +1,7 @@
 import { newTask, Task } from "@/utils/types";
 import { Timestamp } from "firebase/firestore";
 import { useState, ChangeEvent, FormEvent, useEffect } from "react";
-import {
-  LuCalendarClock,
-  LuCalendarOff,
-} from "../utils/reactIcons";
+import { LuCalendarClock, LuCalendarOff } from "../utils/reactIcons";
 import DurationPicker from "./DurationPicker";
 import Select from "./Select";
 import { useTasksContext } from "@/providers/TasksContext";
@@ -12,11 +9,7 @@ import { categoryOptions, priorityOptions } from "@/utils/SharedContent";
 import { AnimatePresence, motion } from "motion/react";
 import { useTaskMaker } from "@/providers/TaskEditorContext";
 
-function TaskMaker({
-  userId,
-}: {
-  userId: Task["userId"];
-}){
+function TaskMaker({ userId }: { userId: Task["userId"] }) {
   // Default task state for new tasks
   const defaultTaskState: newTask = {
     userId,
@@ -29,12 +22,11 @@ function TaskMaker({
     duration: { hour: 0, min: 1 },
     isTimeSpecific: false,
     datetime: "",
-    isScheduled: false, 
+    isScheduled: false,
   };
 
   const { isOpen, taskInitials, mode, closeTaskMaker } = useTaskMaker();
   if (!isOpen) return null;
-  
 
   const context = useTasksContext();
   const updateTask = context.updateTask;
@@ -45,10 +37,9 @@ function TaskMaker({
     taskInitials || defaultTaskState
   );
   const [disabled, setDisabled] = useState(false);
+  const [message, setMessage] = useState({ active: false, mess: "" });
 
-useEffect(() => {
-  // Define the debounce function
-  const debounceValidation = setTimeout(() => {
+  useEffect(() => {
     if (
       !taskState.description ||
       taskState.priority === -1 ||
@@ -59,11 +50,11 @@ useEffect(() => {
     } else {
       setDisabled(false);
     }
-  }, 300); // Debounce delay (adjust as needed)
+  }, [taskState]);
 
-  // Cleanup the timeout on dependency change
-  return () => clearTimeout(debounceValidation);
-}, [taskState]);
+  useEffect(() => {
+    setTimeout(() => setMessage({ active: false, mess: "" }), 2000);
+  }, [message]);
 
   // Handle input changes
   const handleChange = (
@@ -105,12 +96,13 @@ useEffect(() => {
 
     if (taskInitials?.id) {
       // Update existing task
-      const currentTaskState  = taskState as Task;
+      const currentTaskState = taskState as Task;
       const allProperties = Object.keys(currentTaskState);
       const modifiedProperties: Record<string, any> = {};
       allProperties.forEach((property) => {
         if (
-          currentTaskState[property as keyof Task] !== taskInitials[property as keyof Task]
+          currentTaskState[property as keyof Task] !==
+          taskInitials[property as keyof Task]
         ) {
           modifiedProperties[property] =
             currentTaskState[property as keyof Task];
@@ -119,20 +111,18 @@ useEffect(() => {
 
       if (Object.keys(modifiedProperties).length > 0) {
         const success = await updateTask(taskInitials.id, modifiedProperties);
-        console.log(success);
+        success && setMessage({ active: true, mess: "Task Updated" });
       } else {
-        alert("No changes detected.");
+        setMessage({ active: true, mess: "No changes detected" });
       }
     } else {
       // Create new task
       const success = await createTask(taskState as Task); // Ensure the state is cast as `Task`
+      success && setMessage({ active: true, mess: "Task Created" });
       console.log(success);
-      
+      setTaskState(defaultTaskState); // Reset the form
     }
-
-    setTaskState(defaultTaskState); // Reset the form
   };
-
 
   return (
     <motion.div
@@ -140,7 +130,7 @@ useEffect(() => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       id="addtask"
-      className="absolute top-0 left-0 w-full h-screen z-50 flex justify-center pt-24 bg-black/50 backdrop-blur-sm" 
+      className="absolute top-0 left-0 w-full h-screen z-50 flex justify-center pt-24 bg-black/50 backdrop-blur-sm"
       onClick={closeTaskMaker}
     >
       <div
@@ -148,9 +138,16 @@ useEffect(() => {
         className="w-[320px] md:w-[400px] h-[350px] text-text border-2 shadow-md flex flex-col gap-5 p-5 rounded-xl z-50 overflow-hidden bg-base200"
         onClick={(event) => event.stopPropagation()}
       >
-        <h1 className="w-full text-xl text-text text-center">
-          {mode == "update" ? "Update Task" : "Create a New Task"}
-        </h1>
+        <div className="relative pb-5">
+          <h1 className="w-full text-xl text-text text-center">
+            {mode == "update" ? "Update Task" : "Create a New Task"}
+          </h1>
+          {message.active && (
+            <h6 className="w-full text-xs text-center absolute bottom-0">
+              {message.mess}
+            </h6>
+          )}
+        </div>
         <input
           type="text"
           name="description"
@@ -252,6 +249,6 @@ useEffect(() => {
       </div>
     </motion.div>
   );
-};
+}
 
 export default TaskMaker;

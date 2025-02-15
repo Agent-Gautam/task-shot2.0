@@ -15,6 +15,7 @@ import {
 } from "firebase/auth";
 import { TaskMakerProvider } from "./providers/TaskEditorContext";
 import Profile from "./components/Profile";
+import { ChangeTheme } from "./utils/firebaseFunctions";
 
 const App: React.FC = () => {
   const [tab, setTab] = useState(0);
@@ -22,7 +23,7 @@ const App: React.FC = () => {
   const [scheduleOpen, setScheduleOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [userId, setUserId] = useState<string>("");
-  const [isLoading, setIsLoading] = useState(true); // Track loading state
+  const [isLoading, setIsLoading] = useState(true);
   const [theme, setTheme] = useState("light");
 
   useEffect(() => {
@@ -37,22 +38,28 @@ const App: React.FC = () => {
         // Listen for authentication state changes
         const unsubscribe = onAuthStateChanged(auth, (user) => {
           if (user) {
-            setUserId(user.uid); // Set the user ID if logged in
+            setUserId(user.uid);
           } else {
-            setUserId(""); // Clear user ID if logged out
+            setUserId("");
           }
-          setIsLoading(false); // Mark as no longer loading
+          setIsLoading(false);
         });
 
-        return () => unsubscribe(); // Clean up listener on unmount
+        return () => unsubscribe();
       } catch (error) {
         console.error("Error initializing authentication:", error);
-        setIsLoading(false); // Ensure loading ends even on error
+        setIsLoading(false);
       }
     };
 
     initializeAuth();
   }, []);
+
+  async function themeChange(theme: "light" | "dark") {
+    const status = await ChangeTheme(userId, theme);
+    status && setTheme(theme);
+    localStorage.setItem("theme", theme);
+  }
 
   return (
     <div
@@ -84,7 +91,7 @@ const App: React.FC = () => {
               openState={profileOpen}
               toggleProfile={() => setProfileOpen(false)}
               theme={theme}
-              setTheme={setTheme}
+              setTheme={themeChange}
             />
             <AnimatePresence>
               <TaskMaker userId={userId} />

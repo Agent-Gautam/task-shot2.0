@@ -124,6 +124,18 @@ const handleSignOut = async () => {
   }
 };
 
+async function ChangeTheme(userId: Task["userId"], newtheme: "light"|"dark"): Promise<boolean> {
+  try {
+    const userRef = doc(base, "users", userId);
+    await updateDoc(userRef, { theme: newtheme });
+    console.log("Theme updated");
+    return true;
+  } catch (error) {
+    console.log("Error", error);
+    return false;
+  }
+}
+
 export {
   CreateTask,
   DeleteTask,
@@ -131,5 +143,6 @@ export {
   FetchTasks,
   FetchScheduleList,
   FetchScheduled,
-  handleSignOut
+  handleSignOut,
+  ChangeTheme
 };

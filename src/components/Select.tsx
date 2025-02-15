@@ -54,7 +54,7 @@ export default function Select({
             initial={{ height: 0 }}
             animate={{ height: "auto" }}
             exit={{ height: 0 }}
-            className={`text-sm absolute left-0 top-[110%] flex flex-wrap gap-1 backdrop-blur-lg rounded-lg overflow-hidden z-50 `}
+            className={`text-sm absolute left-0 top-[110%] flex flex-wrap gap-1 backdrop-blur-lg rounded-lg overflow-hidden z-50 dark:text-white`}
           >
             {options.map((opt, id) => (
               <button
@@ -64,7 +64,7 @@ export default function Select({
                 }}
                 key={`${title + id}`}
                 title={opt.text}
-                className="w-full flex items-center gap-2 hover:bg-neutral"
+                className="w-full flex items-center gap-2 hover:bg-neutral text-current"
               >
                 {opt.icon}
                 <h1 className="text-xs">{opt.text}</h1>

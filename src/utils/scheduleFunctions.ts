@@ -84,7 +84,6 @@ export function scheduleTask(
   return null;
 }
 
-// **7. Check if a task is expired:** Determine if the task's duration has passed since its scheduled time.
 export function isTaskExpired(
   scheduledTime: number,
   duration: Task['duration']

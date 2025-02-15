@@ -40,7 +40,6 @@ import { PiEmptyBold } from "react-icons/pi";
 import { TiTick, TiArrowSortedUp, TiArrowSortedDown } from "react-icons/ti";
 import { BsHourglassSplit } from "react-icons/bs";
 import { LiaSignOutAltSolid } from "react-icons/lia";
-import { IoMenu } from "react-icons/io5";
 
 export {
   BsHourglassSplit,

@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { base } from "../utils/firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc } from "firebase/firestore";
 import { FaUserCircle } from "react-icons/fa";
 import { MdClose } from "react-icons/md";
 import { handleSignOut } from "@/utils/firebaseFunctions";
 import { LiaSignOutAltSolid } from "react-icons/lia";
 import Theme from "./Theme";
+import  tasks  from "../MockData";
 
 interface UserData {
   uid: string;
@@ -27,13 +28,21 @@ const Profile = ({
   openState: boolean;
   toggleProfile: Function;
   theme: string;
-  setTheme: React.Dispatch<React.SetStateAction<string>>;
+    setTheme: (theme: "light" | "dark") => void;
 }) => {
   const [userData, setUserData] = useState<UserData | null>(null);
 
-  const toggleTheme = (newTheme: "light" | "dark") => {
-    setTheme(newTheme);
-  };
+  //function to create tasks from mockTasks 
+  const createTasks = async () => {
+    const tasksRef = collection(base, "tasks");
+    tasks.forEach(async (task) => {
+      try {
+        await addDoc(tasksRef, task);
+      } catch (error) {
+        console.error("Error adding document: ", error);
+      }
+    });
+  }
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -51,7 +60,9 @@ const Profile = ({
             photoUrl: photoUrl || "", // Provide default value
             theme: theme,
           });
-          localStorage.setItem("theme", userData?.theme || "light");
+          console.log(theme);
+          
+          localStorage.setItem("theme", theme || "light");
         } else {
           console.log("No such user document!");
         }
@@ -59,7 +70,7 @@ const Profile = ({
         console.error("Error fetching user data:", error);
       }
     };
-    console.log(userData?.photoUrl);
+    // console.log(userData?.photoUrl);
     fetchUser();
   }, [user]); // Add `user` to dependency array
 
@@ -76,7 +87,7 @@ const Profile = ({
           onClick={() => toggleProfile()}
         />
       </button>
-      <div className="flex flex-col gap-3 items-center bg-base p-4 rounded-xl">
+      <div className="flex flex-col gap-3 items-center bg-base p-4 rounded-xl" onDoubleClick={createTasks}>
         <FaUserCircle className="bg-primary text-neutral rounded-full w-[50%] h-full " />
         <p className="text-text text-lg font-semibold">{userData?.name}</p>
       </div>
@@ -91,7 +102,7 @@ const Profile = ({
           <strong className="text-3xl font-bold">10</strong>
         </div>
       </div>
-      <Theme theme={theme} toggleTheme={ (v: "light"|"dark") => toggleTheme(v)} />
+      <Theme theme={theme} toggleTheme={setTheme} />
       <button
         className="w-full backdrop-blur-md rounded-md px-2 py-1 flex items-center gap-2 text-xl bg-white/60 text-secondary"
         onClick={handleSignOut}
